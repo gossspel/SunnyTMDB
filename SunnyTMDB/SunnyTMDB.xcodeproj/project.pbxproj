@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1AA48BDBAB015890D358A340 /* Pods_SunnyTMDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C834DAF86FBC65ABEE0F598 /* Pods_SunnyTMDB.framework */; };
 		6BDCFEF526E82BAE00869CBF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BDCFEF426E82BAE00869CBF /* AppDelegate.swift */; };
 		6BDCFEFB26E82BAF00869CBF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6BDCFEFA26E82BAF00869CBF /* Assets.xcassets */; };
 		6BDCFEFE26E82BAF00869CBF /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6BDCFEFD26E82BAF00869CBF /* Preview Assets.xcassets */; };
@@ -33,6 +34,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2C834DAF86FBC65ABEE0F598 /* Pods_SunnyTMDB.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SunnyTMDB.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6BDCFEF126E82BAE00869CBF /* SunnyTMDB.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SunnyTMDB.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6BDCFEF426E82BAE00869CBF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6BDCFEFA26E82BAF00869CBF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -45,6 +47,8 @@
 		6BDCFF1226E82BAF00869CBF /* SunnyTMDBUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SunnyTMDBUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6BDCFF1626E82BAF00869CBF /* SunnyTMDBUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SunnyTMDBUITests.swift; sourceTree = "<group>"; };
 		6BDCFF1826E82BAF00869CBF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		99A843A6069809932F4D0497 /* Pods-SunnyTMDB.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SunnyTMDB.debug.xcconfig"; path = "Target Support Files/Pods-SunnyTMDB/Pods-SunnyTMDB.debug.xcconfig"; sourceTree = "<group>"; };
+		BB7C0119F8F83B684E454CA2 /* Pods-SunnyTMDB.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SunnyTMDB.release.xcconfig"; path = "Target Support Files/Pods-SunnyTMDB/Pods-SunnyTMDB.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -52,6 +56,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1AA48BDBAB015890D358A340 /* Pods_SunnyTMDB.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -72,6 +77,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4CA7E1FBF9BC44E7F6673684 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				2C834DAF86FBC65ABEE0F598 /* Pods_SunnyTMDB.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		6BDCFEE826E82BAE00869CBF = {
 			isa = PBXGroup;
 			children = (
@@ -79,6 +92,8 @@
 				6BDCFF0A26E82BAF00869CBF /* SunnyTMDBTests */,
 				6BDCFF1526E82BAF00869CBF /* SunnyTMDBUITests */,
 				6BDCFEF226E82BAE00869CBF /* Products */,
+				859A51A5D944C6680B75C834 /* Pods */,
+				4CA7E1FBF9BC44E7F6673684 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -130,6 +145,16 @@
 			path = SunnyTMDBUITests;
 			sourceTree = "<group>";
 		};
+		859A51A5D944C6680B75C834 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				99A843A6069809932F4D0497 /* Pods-SunnyTMDB.debug.xcconfig */,
+				BB7C0119F8F83B684E454CA2 /* Pods-SunnyTMDB.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -137,9 +162,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 6BDCFF1B26E82BAF00869CBF /* Build configuration list for PBXNativeTarget "SunnyTMDB" */;
 			buildPhases = (
+				8BCB35006872018199A18BD5 /* [CP] Check Pods Manifest.lock */,
 				6BDCFEED26E82BAE00869CBF /* Sources */,
 				6BDCFEEE26E82BAE00869CBF /* Frameworks */,
 				6BDCFEEF26E82BAE00869CBF /* Resources */,
+				89BE797DD66C77C04A00F8F8 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -254,6 +281,48 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		89BE797DD66C77C04A00F8F8 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-SunnyTMDB/Pods-SunnyTMDB-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-SunnyTMDB/Pods-SunnyTMDB-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SunnyTMDB/Pods-SunnyTMDB-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		8BCB35006872018199A18BD5 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-SunnyTMDB-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		6BDCFEED26E82BAE00869CBF /* Sources */ = {
@@ -425,6 +494,7 @@
 		};
 		6BDCFF1C26E82BAF00869CBF /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 99A843A6069809932F4D0497 /* Pods-SunnyTMDB.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -446,6 +516,7 @@
 		};
 		6BDCFF1D26E82BAF00869CBF /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = BB7C0119F8F83B684E454CA2 /* Pods-SunnyTMDB.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
