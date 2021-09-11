@@ -10,9 +10,9 @@ import Foundation
 typealias HTTPStatusCode = Int
 
 protocol HTTPManagerProtocol {
-    func sendHTTPGETRequest(URLStr: String,
+    func sendHTTPGETRequest(urlStr: String,
                             headers: [String: String]?,
                             queryStringParams: [String: Any]?,
-                            JSONHandler: @escaping (String) -> Void,
+                            jsonHandler: @escaping (String) -> Void,
                             failureHandler: ((HTTPStatusCode?) -> Void)?) -> Void
 }
