@@ -24,5 +24,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.makeKeyAndVisible()
         return true
     }
+    
+    // TODO: Finish the project using MVP architecture first
+    
+    // TODO: Create the APIClient
 }
 
