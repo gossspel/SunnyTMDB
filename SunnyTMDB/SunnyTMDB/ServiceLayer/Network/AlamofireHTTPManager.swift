@@ -6,7 +6,14 @@
 //
 
 import Foundation
+import Alamofire
 
-class AlamofireHTTPManager {
-    // TODO: finish this
+class AlamofireHTTPManager: HTTPManagerProtocol {
+    func sendHTTPGETRequest(URLStr: String, headers: [String : String]?,
+                            queryStringParams: [String : Any]?,
+                            JSONHandler: @escaping (String) -> Void,
+                            failureHandler: ((HTTPStatusCode?) -> Void)?)
+    {
+        // TODO: finish this
+    }
 }

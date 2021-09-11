@@ -16,18 +16,3 @@ protocol HTTPManagerProtocol {
                             JSONHandler: @escaping (String) -> Void,
                             failureHandler: ((HTTPStatusCode?) -> Void)?) -> Void
 }
-
-extension HTTPManagerProtocol {
-    func sendHTTPGETRequest(URLStr: String,
-                            headers: [String: String]? = nil,
-                            queryStringParams: [String: Any]? = nil,
-                            JSONHandler: @escaping (String) -> Void,
-                            failureHandler: ((HTTPStatusCode?) -> Void)?) -> Void
-    {
-        sendHTTPGETRequest(URLStr: URLStr,
-                           headers: headers,
-                           queryStringParams: queryStringParams,
-                           JSONHandler: JSONHandler,
-                           failureHandler: failureHandler)
-    }
-}
