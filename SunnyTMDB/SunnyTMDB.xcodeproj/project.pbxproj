@@ -115,6 +115,13 @@
 			path = HTTPManager;
 			sourceTree = "<group>";
 		};
+		6BC41D4A26EE755300979ED4 /* DataService */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = DataService;
+			sourceTree = "<group>";
+		};
 		6BD1AB7826ED6D7D00DD8B31 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
@@ -199,6 +206,7 @@
 			children = (
 				6BC41D4926EE751B00979ED4 /* HTTPManager */,
 				6BC41D4826EE750E00979ED4 /* APIClient */,
+				6BC41D4A26EE755300979ED4 /* DataService */,
 			);
 			path = Network;
 			sourceTree = "<group>";
