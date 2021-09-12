@@ -57,10 +57,23 @@ class AlamofireHTTPManager {
         
         switch data.result {
         case .success:
-            // TODO: finish this
-            
-            let successMessage = "HTTP \(method.rawValue) request of \(urlStr) succeeded."
-            ConsoleUtility.printConsoleMessage(messageType: .success, message: successMessage)
+            if let statusCode = ConsoleUtility.validate(optional: data.response?.statusCode),
+               let jsonStr = ConsoleUtility.validate(optional: data.value),
+               200...299 ~= statusCode
+            {
+                let successMessage = "HTTP \(method.rawValue) request of \(urlStr) succeeded."
+                ConsoleUtility.printConsoleMessage(messageType: .success, message: successMessage)
+                jsonHandler(jsonStr)
+            } else {
+                let statusCodeIntValue: Int = data.response?.statusCode ?? -1
+                let statusCodeStrValue: String = (statusCodeIntValue != -1) ? String(statusCodeIntValue) : "nil"
+                let jsonStrValue: String = data.value ?? "nil"
+                var errorMessage = "HTTP \(method.rawValue) request of \(urlStr) failed with "
+                errorMessage += "statusCode: \(statusCodeStrValue), "
+                errorMessage += "JSONStr: \(jsonStrValue)."
+                ConsoleUtility.printConsoleMessage(messageType: .error, message: errorMessage)
+                failureHandler?(data.response?.statusCode)
+            }
             
         case let .failure(error):
             var errorMessage = "HTTP \(method.rawValue) request of \(urlStr) failed without status code, error: "
