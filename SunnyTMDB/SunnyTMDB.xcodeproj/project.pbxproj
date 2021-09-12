@@ -97,6 +97,24 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		6BC41D4826EE750E00979ED4 /* APIClient */ = {
+			isa = PBXGroup;
+			children = (
+				6BF74DDC26EC0BD500E834D0 /* APIClientProtocol.swift */,
+				6BD1AB7626ED496B00DD8B31 /* APIClient.swift */,
+			);
+			path = APIClient;
+			sourceTree = "<group>";
+		};
+		6BC41D4926EE751B00979ED4 /* HTTPManager */ = {
+			isa = PBXGroup;
+			children = (
+				6BF74DE026EC0E2F00E834D0 /* HTTPManagerProtocol.swift */,
+				6BD1AB7426ED461500DD8B31 /* AlamofireHTTPManager.swift */,
+			);
+			path = HTTPManager;
+			sourceTree = "<group>";
+		};
 		6BD1AB7826ED6D7D00DD8B31 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
@@ -179,10 +197,8 @@
 		6BF74DDE26EC0DF800E834D0 /* Network */ = {
 			isa = PBXGroup;
 			children = (
-				6BF74DDC26EC0BD500E834D0 /* APIClientProtocol.swift */,
-				6BF74DE026EC0E2F00E834D0 /* HTTPManagerProtocol.swift */,
-				6BD1AB7426ED461500DD8B31 /* AlamofireHTTPManager.swift */,
-				6BD1AB7626ED496B00DD8B31 /* APIClient.swift */,
+				6BC41D4926EE751B00979ED4 /* HTTPManager */,
+				6BC41D4826EE750E00979ED4 /* APIClient */,
 			);
 			path = Network;
 			sourceTree = "<group>";
