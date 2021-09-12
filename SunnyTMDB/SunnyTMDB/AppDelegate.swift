@@ -26,7 +26,5 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     // TODO: Finish the project using MVP architecture first
-    
-    // TODO: Create the APIClient
 }
 
