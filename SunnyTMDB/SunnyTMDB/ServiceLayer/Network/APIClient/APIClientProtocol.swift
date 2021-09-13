@@ -9,4 +9,6 @@ import Foundation
 
 protocol APIClientProtocol {
     var httpManager: HTTPManagerProtocol { get }
+    func getAuthorizedHeaders(headers: [String : String]?) -> [String : String]
+    func getURLStr(uriStr: String) -> String
 }
