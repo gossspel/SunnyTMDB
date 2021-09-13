@@ -21,10 +21,10 @@ class APIClient {
         self.httpManager = httpManager
     }
     
-    var defaultInstance: APIClientProtocol {
+    static var defaultInstance: APIClientProtocol {
         // TODO: Need to save and retrive bearerToken from Keychain Services to make this production ready.
-        let instance = APIClient(baseURLStr: Self.defaultBaseURLStr,
-                                 bearerToken: Self.defaultBearerToken,
+        let instance = APIClient(baseURLStr: defaultBaseURLStr,
+                                 bearerToken: defaultBearerToken,
                                  httpManager: AlamofireHTTPManager())
         return instance
     }
