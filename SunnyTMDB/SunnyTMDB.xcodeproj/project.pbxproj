@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		1AA48BDBAB015890D358A340 /* Pods_SunnyTMDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C834DAF86FBC65ABEE0F598 /* Pods_SunnyTMDB.framework */; };
 		6B03781C26EFF874004FA0B9 /* MovieSearchVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B03781B26EFF874004FA0B9 /* MovieSearchVC.swift */; };
+		6B2E05F826F01909009362D2 /* MovieSearchPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B2E05F726F01909009362D2 /* MovieSearchPresenter.swift */; };
 		6BC41D4E26EE7F9700979ED4 /* JSONCoderUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BC41D4D26EE7F9700979ED4 /* JSONCoderUtility.swift */; };
 		6BC41D5026EEAEDB00979ED4 /* MovieDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BC41D4F26EEAEDB00979ED4 /* MovieDTO.swift */; };
 		6BC41D5226EEC39200979ED4 /* MoviesSearchResultDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BC41D5126EEC39200979ED4 /* MoviesSearchResultDTO.swift */; };
@@ -47,6 +48,7 @@
 /* Begin PBXFileReference section */
 		2C834DAF86FBC65ABEE0F598 /* Pods_SunnyTMDB.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SunnyTMDB.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6B03781B26EFF874004FA0B9 /* MovieSearchVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieSearchVC.swift; sourceTree = "<group>"; };
+		6B2E05F726F01909009362D2 /* MovieSearchPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieSearchPresenter.swift; sourceTree = "<group>"; };
 		6BC41D4D26EE7F9700979ED4 /* JSONCoderUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONCoderUtility.swift; sourceTree = "<group>"; };
 		6BC41D4F26EEAEDB00979ED4 /* MovieDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDTO.swift; sourceTree = "<group>"; };
 		6BC41D5126EEC39200979ED4 /* MoviesSearchResultDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoviesSearchResultDTO.swift; sourceTree = "<group>"; };
@@ -119,6 +121,7 @@
 			isa = PBXGroup;
 			children = (
 				6B03781B26EFF874004FA0B9 /* MovieSearchVC.swift */,
+				6B2E05F726F01909009362D2 /* MovieSearchPresenter.swift */,
 			);
 			path = MovieSearch;
 			sourceTree = "<group>";
@@ -446,6 +449,7 @@
 				6BDCFEF526E82BAE00869CBF /* AppDelegate.swift in Sources */,
 				6BD1AB7C26ED701400DD8B31 /* DateUtility.swift in Sources */,
 				6BC41D4E26EE7F9700979ED4 /* JSONCoderUtility.swift in Sources */,
+				6B2E05F826F01909009362D2 /* MovieSearchPresenter.swift in Sources */,
 				6BF74DE126EC0E2F00E834D0 /* HTTPManagerProtocol.swift in Sources */,
 				6BD1AB7726ED496B00DD8B31 /* TMDBAPIClient.swift in Sources */,
 				6BC41D5026EEAEDB00979ED4 /* MovieDTO.swift in Sources */,
