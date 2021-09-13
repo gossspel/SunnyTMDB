@@ -17,7 +17,7 @@ class MoviesSearchDataService {
     var apiClient: APIClientProtocol
     var uriStr: String
     
-    init(apiClient: APIClientProtocol = APIClient.defaultInstance, uriStr: String = defaultURIStr) {
+    init(apiClient: APIClientProtocol = TMDBAPIClient.defaultInstance, uriStr: String = defaultURIStr) {
         self.apiClient = apiClient
         self.uriStr = uriStr
     }

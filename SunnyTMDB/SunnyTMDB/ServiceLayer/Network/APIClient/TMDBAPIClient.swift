@@ -1,5 +1,5 @@
 //
-//  APIClient.swift
+//  TMDBAPIClient.swift
 //  SunnyTMDB
 //
 //  Created by Sunny Chan on 9/11/21.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-class APIClient {
+final class TMDBAPIClient {
     private static let defaultBearerToken: String = ""
     private static let defaultBaseURLStr: String = "https://api.themoviedb.org/3"
     
@@ -23,14 +23,14 @@ class APIClient {
     
     static var defaultInstance: APIClientProtocol {
         // TODO: Need to save and retrive bearerToken from Keychain Services to make this production ready.
-        let instance = APIClient(baseURLStr: defaultBaseURLStr,
-                                 bearerToken: defaultBearerToken,
-                                 httpManager: AlamofireHTTPManager())
+        let instance = TMDBAPIClient(baseURLStr: defaultBaseURLStr,
+                                     bearerToken: defaultBearerToken,
+                                     httpManager: AlamofireHTTPManager())
         return instance
     }
 }
 
-extension APIClient: APIClientProtocol {
+extension TMDBAPIClient: APIClientProtocol {
     func getAuthorizedHeaders(headers: [String : String]?) -> [String : String] {
         var authorizedHeaders: [String : String] = headers ?? [:]
         authorizedHeaders["Authorization"] = "Bearer \(bearerToken)"
