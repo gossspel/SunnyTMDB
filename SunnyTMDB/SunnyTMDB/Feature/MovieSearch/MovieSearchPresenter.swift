@@ -7,6 +7,14 @@
 
 import Foundation
 
+protocol PresenterProtocol: AnyObject {
+    func doInitialSetup()
+}
+
+protocol MovieSearchPresenterProtocol: PresenterProtocol {
+    func attachView(view: MovieSearchViewProtocol)
+}
+
 class MovieSearchPresenter {
     
 }
