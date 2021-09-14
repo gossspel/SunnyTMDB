@@ -30,3 +30,18 @@ extension MovieSearchVC {
         // Do any additional setup after loading the view.
     }
 }
+
+// MARK: - View Setup
+
+extension MovieSearchVC {
+    private func loadTableView() {
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.separatorStyle = .none
+        
+        // NOTE: Eliminate extra separators below UITableView
+        // LINK: https://stackoverflow.com/a/5377569
+        tableView.tableFooterView = UIView(frame: .zero)
+        
+        // TODO: finish this
+    }
+}
