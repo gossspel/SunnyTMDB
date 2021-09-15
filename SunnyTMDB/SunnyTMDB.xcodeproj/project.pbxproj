@@ -132,6 +132,13 @@
 			path = MovieSearch;
 			sourceTree = "<group>";
 		};
+		6B2A0FAD26F2B47100FB87CE /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		6BC41D4826EE750E00979ED4 /* APIClient */ = {
 			isa = PBXGroup;
 			children = (
@@ -210,6 +217,7 @@
 		6BDCFEF326E82BAE00869CBF /* SunnyTMDB */ = {
 			isa = PBXGroup;
 			children = (
+				6B2A0FAD26F2B47100FB87CE /* Extensions */,
 				6B03781A26EFF85F004FA0B9 /* Feature */,
 				6BC41D4B26EE7B5500979ED4 /* ModelLayer */,
 				6BF74DDA26EC0BA600E834D0 /* ServiceLayer */,
