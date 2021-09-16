@@ -16,5 +16,5 @@ protocol ImageViewProtocol: AnyObject {
 }
 
 protocol CircularRingViewProtocol: AnyObject {
-    func updateRingFill(percentage: Float?, animated: Bool)
+    func updateRingFill(percentage: Float?, ringHexColorStr: String?, animated: Bool)
 }
