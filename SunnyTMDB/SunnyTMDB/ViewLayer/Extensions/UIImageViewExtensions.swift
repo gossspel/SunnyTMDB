@@ -8,7 +8,9 @@
 import UIKit
 import Kingfisher
 
-extension UIImageView {
+// MARK: - ImageViewProtocol Conformation
+
+extension UIImageView: ImageViewProtocol {
     func updateImageByRemoteURL(imageURLStr: String?) {
         if let sureImageURLStr = imageURLStr {
             let imageURL = URL(string: sureImageURLStr)

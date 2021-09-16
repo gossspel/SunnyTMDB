@@ -226,7 +226,6 @@
 			isa = PBXGroup;
 			children = (
 				6BE2C61426F401FF00E15E6F /* ViewLayer */,
-				6B2A0FAD26F2B47100FB87CE /* Extensions */,
 				6B03781A26EFF85F004FA0B9 /* Feature */,
 				6BC41D4B26EE7B5500979ED4 /* ModelLayer */,
 				6BF74DDA26EC0BA600E834D0 /* ServiceLayer */,
@@ -270,6 +269,7 @@
 			isa = PBXGroup;
 			children = (
 				6BE2C61526F4023700E15E6F /* ViewProtocols.swift */,
+				6B2A0FAD26F2B47100FB87CE /* Extensions */,
 			);
 			path = ViewLayer;
 			sourceTree = "<group>";
