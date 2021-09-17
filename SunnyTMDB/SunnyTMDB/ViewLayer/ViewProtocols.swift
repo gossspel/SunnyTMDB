@@ -15,6 +15,7 @@ protocol ImageViewProtocol: AnyObject {
     func updateImageByRemoteURL(imageURLStr: String?)
 }
 
-protocol CircularRingViewProtocol: AnyObject {
+protocol RingPercentViewProtocol: AnyObject {
+    var percentageLabel: LabelProtocol { get }
     func updateRingFill(percentage: Float?, ringHexColorStr: String?, animated: Bool)
 }
