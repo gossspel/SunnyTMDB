@@ -17,8 +17,8 @@ class RingPercentView: UIView {
     private let ringWidth: CGFloat
     private let labelRadiusWithoutRing: CGFloat
     
-    init(baseRingColor: UIColor,
-         ringFillColor: UIColor,
+    init(baseRingColor: UIColor = UIColor.customLightGray,
+         ringFillColor: UIColor = UIColor.customLightGreen,
          ringWidth: CGFloat = 5,
          labelRadiusWithoutRing: CGFloat = 25)
     {
