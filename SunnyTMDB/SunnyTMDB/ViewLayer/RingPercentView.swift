@@ -15,17 +15,17 @@ class RingPercentView: UIView {
     private let baseRingColor: UIColor
     private var ringFillColor: UIColor
     private let ringWidth: CGFloat
-    private let labelRadiusWithoutRing: CGFloat
+    private let radiusWithoutRing: CGFloat
     
     init(baseRingColor: UIColor = UIColor.customLightGray,
          ringFillColor: UIColor = UIColor.customLightGreen,
          ringWidth: CGFloat = 5,
-         labelRadiusWithoutRing: CGFloat = 25)
+         radiusWithoutRing: CGFloat = 25)
     {
         self.baseRingColor = baseRingColor
         self.ringFillColor = ringFillColor
         self.ringWidth = ringWidth
-        self.labelRadiusWithoutRing = labelRadiusWithoutRing
+        self.radiusWithoutRing = radiusWithoutRing
         super.init(frame: .zero)
         loadSubviews()
         setUpAndActivateLayoutConstraints()
@@ -111,16 +111,48 @@ extension RingPercentView {
 
 extension RingPercentView {
     private var views: [String: UIView] {
-        return [:]
+        let dict: [String: UIView] = ["percent": percentLabel, "ring": ringView]
+        return dict
     }
     
     private var allLayoutConstraints: [NSLayoutConstraint] {
         var constraints: [NSLayoutConstraint] = []
+        constraints += percentLabelVConstraints
+        constraints += percentLabelHConstraints
+        constraints += ringViewVConstraints
+        constraints += ringViewHConstraints
         return constraints
     }
     
-    // TODO: finish this
     private func setUpAndActivateLayoutConstraints() {
         NSLayoutConstraint.activate(allLayoutConstraints)
+    }
+    
+    private var percentLabelVConstraints: [NSLayoutConstraint] {
+        let height: CGFloat = radiusWithoutRing * 2
+        let padding: CGFloat = ringWidth
+        let VFLStr = "V:|-\(padding)-[percent(\(height))]-\(padding)-|"
+        return NSLayoutConstraint.constraints(withVisualFormat: VFLStr, options: [], metrics: nil, views: views)
+    }
+    
+    private var percentLabelHConstraints: [NSLayoutConstraint] {
+        let width: CGFloat = radiusWithoutRing * 2
+        let padding: CGFloat = ringWidth
+        let VFLStr = "H:|-\(padding)-[percent(\(width))]-\(padding)-|"
+        return NSLayoutConstraint.constraints(withVisualFormat: VFLStr, options: [], metrics: nil, views: views)
+    }
+    
+    private var ringViewVConstraints: [NSLayoutConstraint] {
+        let height: CGFloat = radiusWithoutRing * 2
+        let padding: CGFloat = ringWidth
+        let VFLStr = "V:|-\(padding)-[ring(\(height))]-\(padding)-|"
+        return NSLayoutConstraint.constraints(withVisualFormat: VFLStr, options: [], metrics: nil, views: views)
+    }
+    
+    private var ringViewHConstraints: [NSLayoutConstraint] {
+        let width: CGFloat = radiusWithoutRing * 2
+        let padding: CGFloat = ringWidth
+        let VFLStr = "H:|-\(padding)-[ring(\(width))]-\(padding)-|"
+        return NSLayoutConstraint.constraints(withVisualFormat: VFLStr, options: [], metrics: nil, views: views)
     }
 }
