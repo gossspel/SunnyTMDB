@@ -36,6 +36,18 @@ class RingPercentView: UIView {
     }
 }
 
+// MARK: - RingPercentViewProtocol Conformation
+
+extension RingPercentView: RingPercentViewProtocol {
+    var percentLabelObject: LabelProtocol {
+        return percentLabel
+    }
+    
+    func updateRingFill(percentage: Float?, ringHexColorStr: String?, animated: Bool) {
+        // TODO: finish this
+    }
+}
+
 // MARK: - Manual Layout
 
 extension RingPercentView {

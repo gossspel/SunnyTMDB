@@ -12,8 +12,8 @@ protocol MovieSearchViewProtocol: AnyObject {
 }
 
 protocol MovieListTableViewCellProtocol: AnyObject {
-    var titleLabel: LabelProtocol { get }
-    var dateLabel: LabelProtocol { get }
-    var posterImageView: ImageViewProtocol { get }
-    var ratingRingView: RingPercentViewProtocol { get }
+    var titleLabelObject: LabelProtocol { get }
+    var dateLabelObject: LabelProtocol { get }
+    var posterImageViewObject: ImageViewProtocol { get }
+    var ratingRingViewObject: RingPercentViewProtocol { get }
 }
