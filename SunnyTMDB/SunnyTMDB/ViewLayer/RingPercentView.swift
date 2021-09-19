@@ -44,7 +44,26 @@ extension RingPercentView: RingPercentViewProtocol {
     }
     
     func updateRingFill(percentage: Float?, ringHexColorStr: String?, animated: Bool) {
-        // TODO: finish this
+        guard let surePercentage = percentage else {
+            return
+        }
+        
+        if let sureRingHexColorStr = ringHexColorStr, let newFillColor = UIColor(hexColorStr: sureRingHexColorStr) {
+            ringFillColor = newFillColor
+            ringFillLayer.strokeColor = ringFillColor.cgColor
+        }
+    
+        let fillDecimal: CGFloat = CGFloat(surePercentage / 100)
+        if animated {
+            let animation = CABasicAnimation(keyPath: "strokeEnd")
+            animation.duration = 2
+            animation.toValue = fillDecimal
+            animation.fillMode = .forwards
+            animation.isRemovedOnCompletion = false
+            ringFillLayer.add(animation, forKey: nil)
+        } else {
+            ringFillLayer.strokeEnd = fillDecimal
+        }
     }
 }
 
