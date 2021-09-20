@@ -14,6 +14,12 @@ class MovieListTableViewCell: UITableViewCell {
     private let dateLabel: UILabel = UILabel()
     private let outerPadding: CGFloat = 16
     private let innerPadding: CGFloat = 8
+    private let posterHeight: CGFloat = 150
+    private let posterWidth: CGFloat = 100
+    private let titleHeight: CGFloat = 92
+    private let ratingHeight: CGFloat = 50
+    private let ratingWidth: CGFloat = 50
+    private let dateHeight: CGFloat = 50
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -112,8 +118,45 @@ extension MovieListTableViewCell {
     
     private var allLayoutConstraints: [NSLayoutConstraint] {
         var constraints: [NSLayoutConstraint] = []
-        // TODO: finish this
+        constraints += posterImageViewVConstraints
+        constraints += ratingRingViewVConstraints
+        constraints += titleLabelVConstraints
+        constraints += dateLabelVConstraints
+        constraints += posterAndTitleHConstraints
+        constraints += posterAndRatingRingAndDateHConstraints
         return constraints
+    }
+    
+    private var posterImageViewVConstraints: [NSLayoutConstraint] {
+        let VFLStr = "V:|-\(outerPadding)-[poster(\(posterHeight))]-\(outerPadding)-|"
+        return NSLayoutConstraint.constraints(withVisualFormat: VFLStr, options: [], metrics: nil, views: views)
+    }
+    
+    private var ratingRingViewVConstraints: [NSLayoutConstraint] {
+        let VFLStr = "V:[rating(\(ratingHeight))]-\(outerPadding)-|"
+        return NSLayoutConstraint.constraints(withVisualFormat: VFLStr, options: [], metrics: nil, views: views)
+    }
+    
+    private var titleLabelVConstraints: [NSLayoutConstraint] {
+        let VFLStr = "V:|-\(outerPadding)-[title(\(titleHeight))]"
+        return NSLayoutConstraint.constraints(withVisualFormat: VFLStr, options: [], metrics: nil, views: views)
+    }
+    
+    private var dateLabelVConstraints: [NSLayoutConstraint] {
+        let VFLStr = "V:[date(\(dateHeight))]-\(outerPadding)-|"
+        return NSLayoutConstraint.constraints(withVisualFormat: VFLStr, options: [], metrics: nil, views: views)
+    }
+    
+    private var posterAndTitleHConstraints: [NSLayoutConstraint] {
+        let VFLStr = "H:|-\(outerPadding)-[poster(\(posterWidth))]-\(innerPadding)-[title]-\(outerPadding)-|"
+        return NSLayoutConstraint.constraints(withVisualFormat: VFLStr, options: [], metrics: nil, views: views)
+    }
+    
+    private var posterAndRatingRingAndDateHConstraints: [NSLayoutConstraint] {
+        let OP: CGFloat = outerPadding
+        let IP: CGFloat = innerPadding
+        let VFLStr = "H:|-\(OP)-[poster(\(posterWidth))]-\(IP)-[rating(\(ratingWidth))]-\(IP)-[date]-\(OP)-|"
+        return NSLayoutConstraint.constraints(withVisualFormat: VFLStr, options: [], metrics: nil, views: views)
     }
     
     private func setUpAndActivateLayoutConstraints() {
