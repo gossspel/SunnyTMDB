@@ -12,14 +12,29 @@ class MovieListTableViewCell: UITableViewCell {
     private let ratingRingView: RingPercentView = RingPercentView()
     private let titleLabel: UILabel = UILabel()
     private let dateLabel: UILabel = UILabel()
-    private let outerPadding: CGFloat = 16
-    private let innerPadding: CGFloat = 8
-    private let posterHeight: CGFloat = 150
-    private let posterWidth: CGFloat = 100
-    private let titleHeight: CGFloat = 92
-    private let ratingHeight: CGFloat = 50
-    private let ratingWidth: CGFloat = 50
-    private let dateHeight: CGFloat = 50
+    private var outerPadding: CGFloat = 16
+    private var innerPadding: CGFloat = 8
+    private var posterHeight: CGFloat = 150
+    
+    private var posterWidth: CGFloat {
+        return posterHeight * 2 / 3
+    }
+    
+    private var titleHeight: CGFloat {
+        return posterHeight - innerPadding - ratingHeight
+    }
+    
+    private var ratingHeight: CGFloat {
+        return posterHeight / 3
+    }
+    
+    private var ratingWidth: CGFloat {
+        return ratingHeight
+    }
+    
+    private var dateHeight: CGFloat {
+        return ratingHeight
+    }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -49,6 +64,21 @@ extension MovieListTableViewCell: MovieListTableViewCellProtocol {
     
     var ratingRingViewObject: RingPercentViewProtocol {
         return ratingRingView
+    }
+    
+    func updateOuterPadding(padding: Float) {
+        self.outerPadding = CGFloat(padding)
+        setNeedsUpdateConstraints()
+    }
+    
+    func updateInnerPadding(padding: Float) {
+        self.innerPadding = CGFloat(padding)
+        setNeedsUpdateConstraints()
+    }
+    
+    func updatePosterHeight(height: Float) {
+        self.posterHeight = CGFloat(height)
+        setNeedsUpdateConstraints()
     }
 }
 

@@ -16,4 +16,8 @@ protocol MovieListTableViewCellProtocol: AnyObject {
     var dateLabelObject: LabelProtocol { get }
     var posterImageViewObject: ImageViewProtocol { get }
     var ratingRingViewObject: RingPercentViewProtocol { get }
+    
+    func updateOuterPadding(padding: Float)
+    func updateInnerPadding(padding: Float)
+    func updatePosterHeight(height: Float)
 }
