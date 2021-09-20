@@ -8,16 +8,115 @@
 import UIKit
 
 class MovieListTableViewCell: UITableViewCell {
-
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
+    private let posterImageView: UIImageView = UIImageView()
+    private let ratingRingView: RingPercentView = RingPercentView()
+    private let titleLabel: UILabel = UILabel()
+    private let dateLabel: UILabel = UILabel()
+    private let outerPadding: CGFloat = 16
+    private let innerPadding: CGFloat = 8
+    
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        self.selectionStyle = .none
+        loadSubviews()
     }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
+}
 
+// MARK: - MovieListTableViewCellProtocol Conformation
+
+extension MovieListTableViewCell: MovieListTableViewCellProtocol {
+    var titleLabelObject: LabelProtocol {
+        return titleLabel
+    }
+    
+    var dateLabelObject: LabelProtocol {
+        return dateLabel
+    }
+    
+    var posterImageViewObject: ImageViewProtocol {
+        return posterImageView
+    }
+    
+    var ratingRingViewObject: RingPercentViewProtocol {
+        return ratingRingView
+    }
+}
+
+// MARK: - UITableViewCell Overrride
+
+extension MovieListTableViewCell {
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        posterImageView.updateImageByRemoteURL(imageURLStr: nil)
+        ratingRingView.updateRingFill(percentage: nil, ringHexColorStr: nil, animated: false)
+        titleLabel.updateLabelText(text: nil)
+        dateLabel.updateLabelText(text: nil)
+    }
+    
+    override func updateConstraints() {
+        super.updateConstraints()
+        setUpAndActivateLayoutConstraints()
+    }
+}
+
+// MARK: - View Setup
+
+extension MovieListTableViewCell {
+    private func loadSubviews() {
+        loadPosterImageView()
+        loadRatingRingView()
+        loadTitleLabel()
+        loadDateLabel()
+        
+        // NOTE: Call setNeedsUpdateConstraints() after adding subviews
+        // LINK: https://stackoverflow.com/a/15895048
+        setNeedsUpdateConstraints()
+    }
+    
+    private func loadPosterImageView() {
+        posterImageView.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(posterImageView)
+    }
+    
+    private func loadRatingRingView() {
+        ratingRingView.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(ratingRingView)
+    }
+    
+    private func loadTitleLabel() {
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        titleLabel.numberOfLines = 2
+        contentView.addSubview(titleLabel)
+    }
+    
+    private func loadDateLabel() {
+        dateLabel.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(dateLabel)
+    }
+}
+
+// MARK: - Auto Layout Setup
+
+extension MovieListTableViewCell {
+    private var views: [String: UIView] {
+        let dict: [String: UIView] = ["poster": posterImageView,
+                                      "rating": ratingRingView,
+                                      "title": titleLabel,
+                                      "date": dateLabel]
+        return dict
+    }
+    
+    private var allLayoutConstraints: [NSLayoutConstraint] {
+        var constraints: [NSLayoutConstraint] = []
+        // TODO: finish this
+        return constraints
+    }
+    
+    private func setUpAndActivateLayoutConstraints() {
+        NSLayoutConstraint.activate(allLayoutConstraints)
+    }
 }

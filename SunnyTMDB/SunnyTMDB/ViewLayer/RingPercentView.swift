@@ -44,9 +44,7 @@ extension RingPercentView: RingPercentViewProtocol {
     }
     
     func updateRingFill(percentage: Float?, ringHexColorStr: String?, animated: Bool) {
-        guard let surePercentage = percentage else {
-            return
-        }
+        let surePercentage: Float = percentage ?? 0
         
         if let sureRingHexColorStr = ringHexColorStr, let newFillColor = UIColor(hexColorStr: sureRingHexColorStr) {
             ringFillColor = newFillColor

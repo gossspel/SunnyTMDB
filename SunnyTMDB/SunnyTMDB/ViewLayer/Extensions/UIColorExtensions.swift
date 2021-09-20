@@ -18,7 +18,6 @@ extension UIColor {
         return color
     }
     
-    // TODO: Use this
     /// Init method to convert hex color from CSS to UIColor
     /// - Parameter hexColorStr: the hexcolor str, should include the pound key (#), and should have total of 7 chars.
     convenience init?(hexColorStr: String) {
