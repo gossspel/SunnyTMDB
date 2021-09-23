@@ -21,7 +21,11 @@ class MovieSearchDataService {
         self.apiClient = apiClient
         self.uriStr = uriStr
     }
-    
+}
+
+// MARK: - MovieSearchDataServiceProtocol Conformation
+
+extension MovieSearchDataService: MovieSearchDataServiceProtocol {
     func sendGetRequest(param: MovieSearchGetRequestParam,
                         successHandler: @escaping (MovieSearchResultDTO) -> Void,
                         failureHandler: ((HTTPStatusCode?) -> Void)?)
