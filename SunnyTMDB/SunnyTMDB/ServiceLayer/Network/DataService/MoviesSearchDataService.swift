@@ -1,5 +1,5 @@
 //
-//  MoviesSearchDataService.swift
+//  MovieSearchDataService.swift
 //  SunnyTMDB
 //
 //  Created by Sunny Chan on 9/12/21.
@@ -7,11 +7,11 @@
 
 import Foundation
 
-struct MoviesSearchGetRequestParam {
+struct MovieSearchGetRequestParam {
     let query: String
 }
 
-class MoviesSearchDataService {
+class MovieSearchDataService {
     private static let defaultURIStr: String = "/search/movie"
     
     var apiClient: APIClientProtocol
@@ -22,8 +22,8 @@ class MoviesSearchDataService {
         self.uriStr = uriStr
     }
     
-    func sendGetRequest(param: MoviesSearchGetRequestParam,
-                        successHandler: @escaping (MoviesSearchResultDTO) -> Void,
+    func sendGetRequest(param: MovieSearchGetRequestParam,
+                        successHandler: @escaping (MovieSearchResultDTO) -> Void,
                         failureHandler: ((HTTPStatusCode?) -> Void)?)
     {
         let jsonHandler = JSONCoderUtility.getJSONHandler(successHandler: successHandler,
