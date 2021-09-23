@@ -11,6 +11,7 @@
 		6B03781C26EFF874004FA0B9 /* MovieSearchVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B03781B26EFF874004FA0B9 /* MovieSearchVC.swift */; };
 		6B2E05F826F01909009362D2 /* MovieSearchPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B2E05F726F01909009362D2 /* MovieSearchPresenter.swift */; };
 		6B2E05FC26F028A3009362D2 /* MovieListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B2E05FB26F028A3009362D2 /* MovieListTableViewCell.swift */; };
+		6B7C9C6826FD1DD600EC5082 /* DataServiceProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B7C9C6726FD1DD600EC5082 /* DataServiceProtocols.swift */; };
 		6B81857926F56DC00059BCDB /* UILabelExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B81857826F56DC00059BCDB /* UILabelExtensions.swift */; };
 		6BB4788B26F2CBA0005F2B4A /* UIImageViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BB4788A26F2CBA0005F2B4A /* UIImageViewExtensions.swift */; };
 		6BC41D4E26EE7F9700979ED4 /* JSONCoderUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BC41D4D26EE7F9700979ED4 /* JSONCoderUtility.swift */; };
@@ -57,6 +58,7 @@
 		6B03781B26EFF874004FA0B9 /* MovieSearchVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieSearchVC.swift; sourceTree = "<group>"; };
 		6B2E05F726F01909009362D2 /* MovieSearchPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieSearchPresenter.swift; sourceTree = "<group>"; };
 		6B2E05FB26F028A3009362D2 /* MovieListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieListTableViewCell.swift; sourceTree = "<group>"; };
+		6B7C9C6726FD1DD600EC5082 /* DataServiceProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataServiceProtocols.swift; sourceTree = "<group>"; };
 		6B81857826F56DC00059BCDB /* UILabelExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UILabelExtensions.swift; sourceTree = "<group>"; };
 		6BB4788A26F2CBA0005F2B4A /* UIImageViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageViewExtensions.swift; sourceTree = "<group>"; };
 		6BC41D4D26EE7F9700979ED4 /* JSONCoderUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONCoderUtility.swift; sourceTree = "<group>"; };
@@ -174,6 +176,7 @@
 			isa = PBXGroup;
 			children = (
 				6BC41D5326EEC4F800979ED4 /* MovieSearchDataService.swift */,
+				6B7C9C6726FD1DD600EC5082 /* DataServiceProtocols.swift */,
 			);
 			path = DataService;
 			sourceTree = "<group>";
@@ -481,6 +484,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6B7C9C6826FD1DD600EC5082 /* DataServiceProtocols.swift in Sources */,
 				6BE2C61A26F40F9200E15E6F /* RingPercentView.swift in Sources */,
 				6BD1AB7A26ED6D9800DD8B31 /* ConsoleUtility.swift in Sources */,
 				6BE2C61826F4031100E15E6F /* MovieSearchViewProtocols.swift in Sources */,
