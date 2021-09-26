@@ -9,6 +9,11 @@ import Foundation
 
 struct MovieSearchGetRequestParam {
     let query: String
+    
+    var queryStrParams: [String: Any] {
+        let params: [String: Any] = ["query": query]
+        return params
+    }
 }
 
 class MovieSearchDataService {
@@ -33,10 +38,9 @@ extension MovieSearchDataService: MovieSearchDataServiceProtocol {
         let jsonHandler = JSONCoderUtility.getJSONHandler(successHandler: successHandler,
                                                           failureHandler: failureHandler)
         let urlStr = apiClient.getURLStr(uriStr: uriStr)
-        // TODO: finish the headers and queryStrParams
         apiClient.httpManager.sendHTTPGETRequest(urlStr: urlStr,
                                                  headers: nil,
-                                                 queryStringParams: nil,
+                                                 queryStringParams: param.queryStrParams,
                                                  jsonHandler: jsonHandler,
                                                  failureHandler: failureHandler)
         
