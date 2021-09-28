@@ -8,7 +8,10 @@
 import Foundation
 
 protocol MovieSearchViewProtocol: AnyObject {
+    var emptyTableLabelObject: LabelProtocol { get }
     func refreshTable()
+    func updateVisibilityOfTableBackgroundView(setIsHidden: Bool)
+    func insertNewRowsInTableToReflectUpdate(indexPaths: [IndexPath])
 }
 
 protocol MovieListTableViewCellProtocol: AnyObject {
@@ -20,4 +23,8 @@ protocol MovieListTableViewCellProtocol: AnyObject {
     func updateOuterPadding(padding: Float)
     func updateInnerPadding(padding: Float)
     func updatePosterHeight(height: Float)
+}
+
+protocol LoadingTableViewCellProtocol {
+    func updateOverallHeight(height: Float)
 }

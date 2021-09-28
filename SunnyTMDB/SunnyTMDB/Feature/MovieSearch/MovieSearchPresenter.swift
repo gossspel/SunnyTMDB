@@ -12,38 +12,52 @@ protocol PresenterProtocol: AnyObject {
 }
 
 protocol MovieSearchPresenterProtocol: PresenterProtocol {
-    var cellReuseID: String { get }
+    var movieCellReuseID: String { get }
+    var numberOfRowsInTable: Int { get }
     
     func attachView(view: MovieSearchViewProtocol)
-    func searchMovie(searchText: String)
+    func handleSearchBarTextDidChange(searchText: String)
 }
 
 class MovieSearchPresenter {
     weak private var view: MovieSearchViewProtocol?
-    let cellReuseID: String
+    let movieCellReuseID: String
     private var searchTask: DispatchWorkItem?
     private var movieSearchService: MovieSearchDataServiceProtocol
+    private var movieResults: [MovieDTO] = []
     
-    init(cellReuseID: String = "MovieListTableViewCell",
+    init(movieCellReuseID: String = "MovieListTableViewCell",
          movieSearchService: MovieSearchDataServiceProtocol = MovieSearchDataService())
     {
-        self.cellReuseID = cellReuseID
+        self.movieCellReuseID = movieCellReuseID
         self.movieSearchService = movieSearchService
+    }
+    
+    private func refreshUI() {
+        view?.refreshTable()
+        view?.updateVisibilityOfTableBackgroundView(setIsHidden: !movieResults.isEmpty)
     }
 }
 
 // MARK: - MovieSearchPresenterProtocol Conformation
 
 extension MovieSearchPresenter: MovieSearchPresenterProtocol {
+    var numberOfRowsInTable: Int {
+        return movieResults.count
+    }
+    
     func attachView(view: MovieSearchViewProtocol) {
         self.view = view
     }
     
     func doInitialSetup() {
-        // TODO: finish this
+        refreshUI()
     }
     
-    func searchMovie(searchText: String) {
+    func handleSearchBarTextDidChange(searchText: String) {
+        // NOTE: do delayed search
+        // LINK: https://stackoverflow.com/a/48666001
+        
         searchTask?.cancel()
         
         let taskBlock: () -> Void = { [weak self] in
@@ -77,10 +91,19 @@ extension MovieSearchPresenter {
     }
     
     private func handleMovieSearchResultResponse(movieSearchResult: MovieSearchResultDTO) {
-        // TODO: finish this
+        if movieSearchResult.currentPage == 1 {
+            movieResults = movieSearchResult.movies
+            // TODO: refreshUI
+        } else {
+            movieResults += movieSearchResult.movies
+            // TODO: call view to insert new rows base on updated datasource
+            // TODO: decide how I want to handle pagination (inifinite scrolling/loading spinner cell at the end)
+        }
     }
     
     private func handleMovieSearchFailureResponse(statusCode: HTTPStatusCode?) {
-        // TODO: finish this
+        movieResults = []
+        view?.emptyTableLabelObject.updateLabelText(text: "No movies found! Try searching again...")
+        refreshUI()
     }
 }
