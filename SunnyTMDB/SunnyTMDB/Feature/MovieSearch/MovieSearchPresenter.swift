@@ -12,8 +12,6 @@ protocol PresenterProtocol: AnyObject {
 }
 
 protocol MovieSearchPresenterProtocol: PresenterProtocol {
-    var movieCellReuseID: String { get }
-    var loadingCellReuseID: String { get }
     var numberOfRowsInTable: Int { get }
     
     func attachView(view: MovieSearchViewProtocol)
@@ -25,9 +23,18 @@ protocol MovieSearchPresenterProtocol: PresenterProtocol {
                              indexPath: IndexPath) -> MovieListTableViewCellProtocol?
 }
 
-enum MovieSearchTableCellType: String {
+enum MovieSearchTableCellType: String, CaseIterable {
     case movieCell
     case loadingCell
+    
+    var cellReuseID: String {
+        switch self {
+        case .movieCell:
+            return "MovieListTableViewCell"
+        case .loadingCell:
+            return "LoadingTableViewCell"
+        }
+    }
 }
 
 struct MovieSearchTableCellData {
@@ -37,8 +44,6 @@ struct MovieSearchTableCellData {
 
 class MovieSearchPresenter {
     weak private var view: MovieSearchViewProtocol?
-    let movieCellReuseID: String
-    let loadingCellReuseID: String
     private let movieImageBaseURLStr: String
     private var searchTask: DispatchWorkItem?
     private var movieSearchService: MovieSearchDataServiceProtocol
@@ -49,16 +54,10 @@ class MovieSearchPresenter {
     private var currentSearchText: String = ""
     
     private static let defaultMovieImageBaseURLStr: String = "https://image.tmdb.org/t/p/w154"
-    private static let defaultMovieCellReuseID: String = "MovieListTableViewCell"
-    private static let defaultLoadingCellReuseID: String = "LoadingTableViewCell"
     
-    init(movieCellReuseID: String = defaultMovieCellReuseID,
-         loadingCellReuseID: String = defaultLoadingCellReuseID,
-         movieImageBaseURLStr: String = defaultMovieImageBaseURLStr,
+    init(movieImageBaseURLStr: String = defaultMovieImageBaseURLStr,
          movieSearchService: MovieSearchDataServiceProtocol = MovieSearchDataService())
     {
-        self.movieCellReuseID = movieCellReuseID
-        self.loadingCellReuseID = loadingCellReuseID
         self.movieSearchService = movieSearchService
         self.movieImageBaseURLStr = movieImageBaseURLStr
     }
@@ -118,12 +117,7 @@ extension MovieSearchPresenter: MovieSearchPresenterProtocol {
     
     func getCellReuseIDAtIndexPath(indexPath: IndexPath) -> String {
         let cellType = getCellTypeAtIndexPath(indexPath: indexPath)
-        switch cellType {
-        case .loadingCell:
-            return loadingCellReuseID
-        case .movieCell:
-            return movieCellReuseID
-        }
+        return cellType.cellReuseID
     }
     
     func handleWillDisplayCellAtIndexPath(indexPath: IndexPath) {

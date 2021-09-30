@@ -88,7 +88,10 @@ extension MovieSearchVC {
         tableView.separatorStyle = .none
         tableView.rowHeight = cellOuterPadding * 2 + cellPosterHeight
         
-        tableView.register(MovieListTableViewCell.self, forCellReuseIdentifier: presenter.movieCellReuseID)
+        for cellType in MovieSearchTableCellType.allCases {
+            cellType.registerResusableCell(tableView: tableView)
+        }
+        
         tableView.dataSource = self
         
         // NOTE: Eliminate extra separators below UITableView
@@ -186,5 +189,22 @@ extension MovieSearchVC: UITableViewDataSource {
 extension MovieSearchVC: UITableViewDelegate {
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         presenter.handleWillDisplayCellAtIndexPath(indexPath: indexPath)
+    }
+}
+
+// MARK: - UIKit Related Extension of MovieSearchTableCellType
+
+private extension MovieSearchTableCellType {
+    func registerResusableCell(tableView: UITableView) {
+        tableView.register(cellClassType, forCellReuseIdentifier: cellReuseID)
+    }
+    
+    var cellClassType: AnyClass {
+        switch self {
+        case .loadingCell:
+            return LoadingTableViewCell.self
+        case .movieCell:
+            return MovieListTableViewCell.self
+        }
     }
 }
