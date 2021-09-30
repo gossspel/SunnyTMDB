@@ -16,16 +16,19 @@ class RingPercentView: UIView {
     private var ringFillColor: UIColor
     private let ringWidth: CGFloat
     private let radiusWithoutRing: CGFloat
+    private let animationDurationInSeconds: Double
     
     init(baseRingColor: UIColor = UIColor.customLightGray,
          ringFillColor: UIColor = UIColor.customLightGreen,
          ringWidth: CGFloat = 5,
-         radiusWithoutRing: CGFloat = 25)
+         radiusWithoutRing: CGFloat = 20,
+         animationDurationInSeconds: Double = 0.5)
     {
         self.baseRingColor = baseRingColor
         self.ringFillColor = ringFillColor
         self.ringWidth = ringWidth
         self.radiusWithoutRing = radiusWithoutRing
+        self.animationDurationInSeconds = animationDurationInSeconds
         super.init(frame: .zero)
         loadSubviews()
         setUpAndActivateLayoutConstraints()
@@ -45,15 +48,16 @@ extension RingPercentView: RingPercentViewProtocol {
     
     func updateRingFill(percentage: Int, ringHexColorStr: String?, animated: Bool) {
         DispatchQueue.main.async {
-            if let sureRingHexColorStr = ringHexColorStr, let newFillColor = UIColor(hexColorStr: sureRingHexColorStr) {
-                self.ringFillColor = newFillColor
+            if let sureRingHexColorStr = ringHexColorStr, let newColor = UIColor(hexColorStr: sureRingHexColorStr) {
+                self.ringFillColor = newColor
                 self.ringFillLayer.strokeColor = self.ringFillColor.cgColor
             }
         
-            let fillDecimal: CGFloat = CGFloat(percentage / 100)
+            let fillDecimal: CGFloat = CGFloat(Float(percentage) / 100)
             if animated {
                 let animation = CABasicAnimation(keyPath: "strokeEnd")
-                animation.duration = 2
+                animation.fromValue = 0
+                animation.duration = self.animationDurationInSeconds
                 animation.toValue = fillDecimal
                 animation.fillMode = .forwards
                 animation.isRemovedOnCompletion = false
@@ -92,7 +96,7 @@ extension RingPercentView {
 
 extension RingPercentView {
     private var ringLayerPath: CGPath {
-        let arcCenter = CGPoint(x: frame.size.width / 2, y: frame.size.height / 2)
+        let arcCenter = CGPoint(x: ringView.frame.size.width / 2, y: ringView.frame.size.height / 2)
         let circularPath = UIBezierPath(arcCenter: arcCenter,
                                         radius: (ringView.frame.size.width / 2) + (ringWidth / 2),
                                         startAngle: -.pi / 2,

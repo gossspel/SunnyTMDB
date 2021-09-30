@@ -37,7 +37,7 @@ extension TMDBAPIClient: APIClientProtocol {
     }
     
     func getURLStr(uriStr: String) -> String {
-        let urlStr = "\(baseURLStr)/\(uriStr)"
+        let urlStr = "\(baseURLStr)\(uriStr)"
         return urlStr
     }
 }
