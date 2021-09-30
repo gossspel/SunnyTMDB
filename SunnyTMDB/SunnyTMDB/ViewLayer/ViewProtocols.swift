@@ -17,5 +17,5 @@ protocol ImageViewProtocol: AnyObject {
 
 protocol RingPercentViewProtocol: AnyObject {
     var percentLabelObject: LabelProtocol { get }
-    func updateRingFill(percentage: Float?, ringHexColorStr: String?, animated: Bool)
+    func updateRingFill(percentage: Int, ringHexColorStr: String?, animated: Bool)
 }

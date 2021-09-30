@@ -41,9 +41,19 @@ extension MovieSearchVC: MovieSearchViewProtocol {
         self.tableView.backgroundView = setIsHidden ? nil : emptyTableLabel
     }
     
-    func insertNewRowsInTableToReflectUpdate(indexPaths: [IndexPath]) {
+    func doBatchOperationsInTable(indexPathsToDelete: [IndexPath], indexPathsToInsert: [IndexPath]) {
+        guard !indexPathsToDelete.isEmpty || !indexPathsToInsert.isEmpty else {
+            return
+        }
+        
         tableView.performBatchUpdates { [weak self] in
-            self?.tableView.insertRows(at: indexPaths, with: .automatic)
+            if !indexPathsToDelete.isEmpty {
+                self?.tableView.deleteRows(at: indexPathsToDelete, with: .automatic)
+            }
+            
+            if !indexPathsToInsert.isEmpty {
+                self?.tableView.insertRows(at: indexPathsToInsert, with: .automatic)
+            }
         }
     }
 }
@@ -144,12 +154,37 @@ extension MovieSearchVC: UISearchBarDelegate {
 
 extension MovieSearchVC: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // TODO: finish this
-        return -1
+        return presenter.numberOfRowsInTable
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        // TODO: finish this
-        return UITableViewCell()
+        let cellType = presenter.getCellTypeAtIndexPath(indexPath: indexPath)
+        let cellReusedID = presenter.getCellReuseIDAtIndexPath(indexPath: indexPath)
+        let dequeuedCell = tableView.dequeueReusableCell(withIdentifier: cellReusedID, for: indexPath)
+        
+        switch cellType {
+        case .loadingCell:
+            return dequeuedCell
+        case .movieCell:
+            guard let movieCell = dequeuedCell as? MovieListTableViewCellProtocol else {
+                return dequeuedCell
+            }
+            
+            let updatedMovieCell = presenter.getUpdatedMovieCell(cell: movieCell, indexPath: indexPath)
+            
+            guard let updatedUIKitMovieCell = updatedMovieCell as? MovieListTableViewCell else {
+                return dequeuedCell
+            }
+            
+            return updatedUIKitMovieCell
+        }
+    }
+}
+
+// MARK: - UITableViewDelegate Conformation
+
+extension MovieSearchVC: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        presenter.handleWillDisplayCellAtIndexPath(indexPath: indexPath)
     }
 }

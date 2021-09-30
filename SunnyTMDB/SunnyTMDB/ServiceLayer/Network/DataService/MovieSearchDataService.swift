@@ -9,9 +9,10 @@ import Foundation
 
 struct MovieSearchGetRequestParam {
     let query: String
+    let page: Int
     
     var queryStrParams: [String: Any] {
-        let params: [String: Any] = ["query": query]
+        let params: [String: Any] = ["query": query, "page": page]
         return params
     }
 }
@@ -38,9 +39,10 @@ extension MovieSearchDataService: MovieSearchDataServiceProtocol {
         let jsonHandler = JSONCoderUtility.getJSONHandler(successHandler: successHandler,
                                                           failureHandler: failureHandler)
         let urlStr = apiClient.getURLStr(uriStr: uriStr)
+        let queryStrParams = apiClient.getQueryStrParamSignedByAPIKey(queryStrParams: param.queryStrParams)
         apiClient.httpManager.sendHTTPGETRequest(urlStr: urlStr,
                                                  headers: nil,
-                                                 queryStringParams: param.queryStrParams,
+                                                 queryStringParams: queryStrParams,
                                                  jsonHandler: jsonHandler,
                                                  failureHandler: failureHandler)
         

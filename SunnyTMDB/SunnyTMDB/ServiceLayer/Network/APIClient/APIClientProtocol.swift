@@ -10,6 +10,7 @@ import Foundation
 protocol APIClientProtocol {
     var httpManager: HTTPManagerProtocol { get }
     func getURLStr(uriStr: String) -> String
+    func getQueryStrParamSignedByAPIKey(queryStrParams: [String : Any]) -> [String : Any]
 }
 
 protocol APIPrivateClientProtocol: APIClientProtocol {

@@ -11,7 +11,7 @@ protocol MovieSearchViewProtocol: AnyObject {
     var emptyTableLabelObject: LabelProtocol { get }
     func refreshTable()
     func updateVisibilityOfTableBackgroundView(setIsHidden: Bool)
-    func insertNewRowsInTableToReflectUpdate(indexPaths: [IndexPath])
+    func doBatchOperationsInTable(indexPathsToDelete: [IndexPath], indexPathsToInsert: [IndexPath])
 }
 
 protocol MovieListTableViewCellProtocol: AnyObject {

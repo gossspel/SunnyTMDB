@@ -43,15 +43,13 @@ extension RingPercentView: RingPercentViewProtocol {
         return percentLabel
     }
     
-    func updateRingFill(percentage: Float?, ringHexColorStr: String?, animated: Bool) {
-        let surePercentage: Float = percentage ?? 0
-        
+    func updateRingFill(percentage: Int, ringHexColorStr: String?, animated: Bool) {
         if let sureRingHexColorStr = ringHexColorStr, let newFillColor = UIColor(hexColorStr: sureRingHexColorStr) {
             ringFillColor = newFillColor
             ringFillLayer.strokeColor = ringFillColor.cgColor
         }
     
-        let fillDecimal: CGFloat = CGFloat(surePercentage / 100)
+        let fillDecimal: CGFloat = CGFloat(percentage / 100)
         if animated {
             let animation = CABasicAnimation(keyPath: "strokeEnd")
             animation.duration = 2

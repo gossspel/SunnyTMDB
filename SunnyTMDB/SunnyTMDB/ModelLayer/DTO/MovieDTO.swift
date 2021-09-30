@@ -10,13 +10,15 @@ import Foundation
 struct MovieDTO: Codable {
     let title: String
     let overview: String
+    let releaseDateStr: String
     let posterURI: String?
-    let rating: Decimal
+    let rating: Double
     let genreIDs: [Int]?
     
     enum CodingKeys: String, CodingKey {
         case title
         case overview
+        case releaseDateStr = "release_date"
         case posterURI = "poster_path"
         case rating = "vote_average"
         case genreIDs = "genre_ids"

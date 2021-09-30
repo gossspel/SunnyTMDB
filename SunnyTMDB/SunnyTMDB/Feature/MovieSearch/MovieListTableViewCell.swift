@@ -88,7 +88,7 @@ extension MovieListTableViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         posterImageView.updateImageByRemoteURL(imageURLStr: nil)
-        ratingRingView.updateRingFill(percentage: nil, ringHexColorStr: nil, animated: false)
+        ratingRingView.updateRingFill(percentage: 0, ringHexColorStr: nil, animated: false)
         titleLabel.updateLabelText(text: nil)
         dateLabel.updateLabelText(text: nil)
     }
