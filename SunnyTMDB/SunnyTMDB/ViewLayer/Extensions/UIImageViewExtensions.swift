@@ -12,11 +12,13 @@ import Kingfisher
 
 extension UIImageView: ImageViewProtocol {
     func updateImageByRemoteURL(imageURLStr: String?) {
-        if let sureImageURLStr = imageURLStr {
-            let imageURL = URL(string: sureImageURLStr)
-            self.kf.setImage(with: imageURL)
-        } else {
-            self.image = nil
+        DispatchQueue.main.async {
+            if let sureImageURLStr = imageURLStr {
+                let imageURL = URL(string: sureImageURLStr)
+                self.kf.setImage(with: imageURL)
+            } else {
+                self.image = nil
+            }
         }
     }
 }

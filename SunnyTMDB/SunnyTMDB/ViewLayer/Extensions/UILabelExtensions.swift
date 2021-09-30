@@ -11,6 +11,8 @@ import UIKit
 
 extension UILabel: LabelProtocol {
     func updateLabelText(text: String?) {
-        self.text = text
+        DispatchQueue.main.async {
+            self.text = text
+        }
     }
 }

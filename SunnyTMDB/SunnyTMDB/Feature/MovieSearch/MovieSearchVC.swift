@@ -34,26 +34,34 @@ extension MovieSearchVC: MovieSearchViewProtocol {
     }
     
     func refreshTable() {
-        tableView.reloadData()
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+        }
     }
     
     func updateVisibilityOfTableBackgroundView(setIsHidden: Bool) {
-        self.tableView.backgroundView = setIsHidden ? nil : emptyTableLabel
+        DispatchQueue.main.async {
+            self.tableView.backgroundView = setIsHidden ? nil : self.emptyTableLabel
+        }
     }
     
     func doBatchOperationsInTable(indexPathsToDelete: [IndexPath], indexPathsToInsert: [IndexPath]) {
-        guard !indexPathsToDelete.isEmpty || !indexPathsToInsert.isEmpty else {
-            return
-        }
-        
-        tableView.performBatchUpdates { [weak self] in
-            if !indexPathsToDelete.isEmpty {
-                self?.tableView.deleteRows(at: indexPathsToDelete, with: .automatic)
+        DispatchQueue.main.async {
+            guard !indexPathsToDelete.isEmpty || !indexPathsToInsert.isEmpty else {
+                return
             }
             
-            if !indexPathsToInsert.isEmpty {
-                self?.tableView.insertRows(at: indexPathsToInsert, with: .automatic)
+            let updateOperations: () -> Void = { [weak self] in
+                if !indexPathsToDelete.isEmpty {
+                    self?.tableView.deleteRows(at: indexPathsToDelete, with: .automatic)
+                }
+                
+                if !indexPathsToInsert.isEmpty {
+                    self?.tableView.insertRows(at: indexPathsToInsert, with: .automatic)
+                }
             }
+            
+            self.tableView.performBatchUpdates(updateOperations)
         }
     }
 }
@@ -131,12 +139,12 @@ extension MovieSearchVC {
     }
     
     private var tableViewVConstraints: [NSLayoutConstraint] {
-        let VFLStr: String = "V:|[tableView]|"
+        let VFLStr: String = "V:|[table]|"
         return NSLayoutConstraint.constraints(withVisualFormat: VFLStr, options: [], metrics: nil, views: views)
     }
     
     private var tableViewHConstraints: [NSLayoutConstraint] {
-        let VFLStr: String = "H:|[tableView]|"
+        let VFLStr: String = "H:|[table]|"
         return NSLayoutConstraint.constraints(withVisualFormat: VFLStr, options: [], metrics: nil, views: views)
     }
     
