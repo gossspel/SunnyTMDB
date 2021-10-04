@@ -53,11 +53,11 @@ extension MovieSearchVC: MovieSearchViewProtocol {
             
             let updateOperations: () -> Void = { [weak self] in
                 if !indexPathsToDelete.isEmpty {
-                    self?.tableView.deleteRows(at: indexPathsToDelete, with: .automatic)
+                    self?.tableView.deleteRows(at: indexPathsToDelete, with: .fade)
                 }
                 
                 if !indexPathsToInsert.isEmpty {
-                    self?.tableView.insertRows(at: indexPathsToInsert, with: .automatic)
+                    self?.tableView.insertRows(at: indexPathsToInsert, with: .fade)
                 }
             }
             
@@ -94,13 +94,20 @@ extension MovieSearchVC {
     private func loadTableView() {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.separatorStyle = .none
-        tableView.rowHeight = cellOuterPadding * 2 + cellPosterHeight
+        
+        let rowHeight: CGFloat = cellOuterPadding * 2 + cellPosterHeight
+        tableView.rowHeight = rowHeight
+        
+        // NOTE: Setting the estimatedRowHeight is necessary for the tableView delegate to behave properly
+        // LINK: https://stackoverflow.com/a/57249122
+        tableView.estimatedRowHeight = rowHeight
         
         for cellType in MovieSearchTableCellType.allCases {
             cellType.registerResusableCell(tableView: tableView)
         }
         
         tableView.dataSource = self
+        tableView.delegate = self
         
         // NOTE: Eliminate extra separators below UITableView
         // LINK: https://stackoverflow.com/a/5377569
@@ -175,7 +182,17 @@ extension MovieSearchVC: UITableViewDataSource {
         
         switch cellType {
         case .loadingCell:
-            return dequeuedCell
+            guard let loadingCell = dequeuedCell as? LoadingTableViewCellProtocol else {
+                return dequeuedCell
+            }
+            
+            let updatedLoadingCell = presenter.getUpdatedLoadingCell(cell: loadingCell)
+            
+            guard let updatedUIKitLoadingCell = updatedLoadingCell as? LoadingTableViewCell else {
+                return dequeuedCell
+            }
+            
+            return updatedUIKitLoadingCell
         case .movieCell:
             guard let movieCell = dequeuedCell as? MovieListTableViewCellProtocol else {
                 return dequeuedCell
@@ -197,6 +214,10 @@ extension MovieSearchVC: UITableViewDataSource {
 extension MovieSearchVC: UITableViewDelegate {
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         presenter.handleWillDisplayCellAtIndexPath(indexPath: indexPath)
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        searchController.searchBar.resignFirstResponder()
     }
 }
 

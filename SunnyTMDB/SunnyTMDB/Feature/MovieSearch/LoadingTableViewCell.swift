@@ -14,6 +14,7 @@ class LoadingTableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.selectionStyle = .none
+        self.contentView.backgroundColor = UIColor.red
         loadSubviews()
     }
     
@@ -28,6 +29,10 @@ extension LoadingTableViewCell: LoadingTableViewCellProtocol {
     func updateOverallHeight(height: Float) {
         self.overallHeight = CGFloat(height)
         setNeedsUpdateConstraints()
+    }
+    
+    func startSpinning() {
+        loadingSpinner.startAnimating()
     }
 }
 

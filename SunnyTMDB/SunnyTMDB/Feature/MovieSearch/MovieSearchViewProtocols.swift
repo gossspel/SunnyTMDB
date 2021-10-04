@@ -27,4 +27,5 @@ protocol MovieListTableViewCellProtocol: AnyObject {
 
 protocol LoadingTableViewCellProtocol {
     func updateOverallHeight(height: Float)
+    func startSpinning()
 }

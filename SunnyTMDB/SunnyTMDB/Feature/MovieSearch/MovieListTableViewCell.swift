@@ -84,15 +84,7 @@ extension MovieListTableViewCell: MovieListTableViewCellProtocol {
 
 // MARK: - UITableViewCell Overrride
 
-extension MovieListTableViewCell {
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        posterImageView.updateImageByRemoteURL(imageURLStr: nil)
-        ratingRingView.updateRingFill(percentage: 0, ringHexColorStr: nil, animated: false)
-        titleLabel.updateLabelText(text: nil)
-        dateLabel.updateLabelText(text: nil)
-    }
-    
+extension MovieListTableViewCell {    
     override func updateConstraints() {
         super.updateConstraints()
         setUpAndActivateLayoutConstraints()

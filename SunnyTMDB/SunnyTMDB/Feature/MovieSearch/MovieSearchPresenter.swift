@@ -19,6 +19,7 @@ protocol MovieSearchPresenterProtocol: PresenterProtocol {
     func getCellTypeAtIndexPath(indexPath: IndexPath) -> MovieSearchTableCellType
     func getCellReuseIDAtIndexPath(indexPath: IndexPath) -> String
     func handleWillDisplayCellAtIndexPath(indexPath: IndexPath)
+    func getUpdatedLoadingCell(cell: LoadingTableViewCellProtocol) -> LoadingTableViewCellProtocol
     func getUpdatedMovieCell(cell: MovieListTableViewCellProtocol,
                              indexPath: IndexPath) -> MovieListTableViewCellProtocol?
 }
@@ -132,12 +133,20 @@ extension MovieSearchPresenter: MovieSearchPresenterProtocol {
             return
         }
         
-        doGetCallViaMovieSearchService(searchText: currentSearchText, page: currentPage + 1)
+        let deadline: DispatchTime = DispatchTime.now() + 0.5
+        DispatchQueue.global(qos: .userInteractive).asyncAfter(deadline: deadline) {
+            self.doGetCallViaMovieSearchService(searchText: self.currentSearchText, page: self.currentPage + 1)
+        }
+    }
+    
+    func getUpdatedLoadingCell(cell: LoadingTableViewCellProtocol) -> LoadingTableViewCellProtocol {
+        cell.startSpinning()
+        return cell
     }
     
     func getUpdatedMovieCell(cell: MovieListTableViewCellProtocol,
                              indexPath: IndexPath) -> MovieListTableViewCellProtocol?
-    {
+    {        
         guard indexPath.row < cellDataList.count, let movieDTO = cellDataList[indexPath.row].movieDTO else {
             return nil
         }
@@ -174,14 +183,23 @@ extension MovieSearchPresenter {
                                           failureHandler: handleMovieSearchFailureResponse)
     }
     
+    // TODO: write test for this to make sure multiple simultaneous call results in 1 displayNextPaginatedSearchResult
+    // call
     private func handleMovieSearchResultResponse(result: MovieSearchResultDTO) {
-        self.currentPage = result.currentPage
-        self.totalPagesCount = result.totalPagesCount
-        
-        if currentPage == 1 {
-            displayBrandNewSearchResult(result: result)
-        } else {
-            displayNextPaginatedSearchResult(result: result)
+        DispatchQueue.global(qos: .userInteractive).async(flags: .barrier) {
+            if self.currentPage > 1 && (self.currentPage == result.currentPage) {
+                ConsoleUtility.printConsoleMessage(messageType: .warning, message: "redundant page \(self.currentPage)")
+                return
+            }
+            
+            self.currentPage = result.currentPage
+            self.totalPagesCount = result.totalPagesCount
+            
+            if self.currentPage == 1 {
+                self.displayBrandNewSearchResult(result: result)
+            } else {
+                self.displayNextPaginatedSearchResult(result: result)
+            }
         }
     }
     
@@ -199,21 +217,21 @@ extension MovieSearchPresenter {
     
     private func displayNextPaginatedSearchResult(result: MovieSearchResultDTO) {
         let isCurrentPageTheLastPage: Bool = result.currentPage == result.totalPagesCount
-        
+
         // NOTE: remove any loading cell from cellDataList
         let indexPathsToDelete: [IndexPath] = Self.getLoadingCellsIndexPaths(cellDataList: cellDataList)
         cellDataList.removeAll { $0.cellType == .loadingCell }
-        
+
         // NOTE: insert paginated movies cells in cellDataList
         let insertionCount: Int = !isCurrentPageTheLastPage ? (result.movies.count + 1) : result.movies.count
         let indexPathsToInsert: [IndexPath] = Self.getIndexPathsToInsert(cellDataList: cellDataList,
                                                                          insertionCount: insertionCount)
         cellDataList += result.movies.map { MovieSearchTableCellData(cellType: .movieCell, movieDTO: $0) }
-        
+
         if !isCurrentPageTheLastPage {
             cellDataList.append(MovieSearchTableCellData(cellType: .loadingCell, movieDTO: nil))
         }
-        
+
         // NOTE: update the table rows to reflect the datasource update.
         view?.doBatchOperationsInTable(indexPathsToDelete: indexPathsToDelete,
                                        indexPathsToInsert: indexPathsToInsert)
