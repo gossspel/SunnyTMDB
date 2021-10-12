@@ -284,7 +284,7 @@ extension MovieSearchVC {
         movieCell.posterImageView.updateImageByRemoteURL(imageURLStr: movieCellViewData.imageURLStr)
         movieCell.titleLabel.text = movieCellViewData.titleLabelStr
         movieCell.ratingRingView.percentLabel.text = movieCellViewData.percentLabelStr
-        movieCell.ratingRingView.updateRingFill(percentage: movieCellViewData.ringFillPercent,
+        movieCell.ratingRingView.updateRingFill(percent: movieCellViewData.ringFillPercent,
                                                 ringHexColorStr: movieCellViewData.ringFillHexColorStr,
                                                 animated: false)
         movieCell.dateLabel.text = movieCellViewData.dateLabelStr

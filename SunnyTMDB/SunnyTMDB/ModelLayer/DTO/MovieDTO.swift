@@ -28,7 +28,7 @@ struct MovieDTO: Codable {
 // MARK: - computed properties 
 
 extension MovieDTO {
-    var ratingPercentage: Int? {
+    var ratingPercent: Int? {
         guard let sureRating = rating else {
             return nil
         }

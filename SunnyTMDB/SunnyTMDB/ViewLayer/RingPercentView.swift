@@ -42,16 +42,14 @@ class RingPercentView: UIView {
 
 // MARK: - Method to update RingPercentView
 
-// TODO: rename all percentage to percent
-
 extension RingPercentView {
-    func updateRingFill(percentage: Int, ringHexColorStr: String?, animated: Bool) {
+    func updateRingFill(percent: Int, ringHexColorStr: String?, animated: Bool) {
         if let sureRingHexColorStr = ringHexColorStr, let newColor = UIColor(hexColorStr: sureRingHexColorStr) {
             self.ringFillColor = newColor
             self.ringFillLayer.strokeColor = self.ringFillColor.cgColor
         }
     
-        let fillDecimal: CGFloat = CGFloat(Float(percentage) / 100)
+        let fillDecimal: CGFloat = CGFloat(Float(percent) / 100)
         if animated {
             let animation = CABasicAnimation(keyPath: "strokeEnd")
             animation.fromValue = 0

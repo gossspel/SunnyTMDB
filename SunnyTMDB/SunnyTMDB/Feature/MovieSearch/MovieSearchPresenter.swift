@@ -116,15 +116,15 @@ extension MovieSearchPresenter: MovieSearchPresenterProtocol {
         }
         
         let imageURLStr = getMovieImageURLStr(imageFileURI: movieDTO.posterURI)
-        let percentLabelStr = Self.getRatingPercentageLabelText(ratingPercentage: movieDTO.ratingPercentage)
-        let ringFillHexColorStr = Self.getHexColorStr(ratingPercentage: movieDTO.ratingPercentage)
+        let percentLabelStr = Self.getRatingPercentLabelText(ratingPercent: movieDTO.ratingPercent)
+        let ringFillHexColorStr = Self.getHexColorStr(ratingPercent: movieDTO.ratingPercent)
         
         let cellViewData = MovieCellViewData(imageURLStr: imageURLStr,
                                              titleLabelStr: movieDTO.title,
                                              overviewLabelStr: movieDTO.overview,
                                              dateLabelStr: movieDTO.releaseDateStr,
                                              percentLabelStr: percentLabelStr,
-                                             ringFillPercent: movieDTO.ratingPercentage ?? 0,
+                                             ringFillPercent: movieDTO.ratingPercent ?? 0,
                                              ringFillHexColorStr: ringFillHexColorStr)
         return cellViewData
     }
@@ -242,16 +242,16 @@ extension MovieSearchPresenter {
         }
     }
     
-    static func getHexColorStr(ratingPercentage: Int?) -> String? {
-        guard let sureRatingPercentage = ratingPercentage else {
+    static func getHexColorStr(ratingPercent: Int?) -> String? {
+        guard let sureRatingPercent = ratingPercent else {
             return nil
         }
         
         let hexColorStr: String
         
-        if sureRatingPercentage >= 70 {
+        if sureRatingPercent >= 70 {
             hexColorStr = "#21d07a" // green
-        } else if sureRatingPercentage < 35 {
+        } else if sureRatingPercent < 35 {
             hexColorStr = "#db2360" // red
         } else {
             hexColorStr = "#d2d531" // yellow
@@ -260,17 +260,17 @@ extension MovieSearchPresenter {
         return hexColorStr
     }
     
-    static func getRatingPercentageLabelText(ratingPercentage: Int?) -> String {
+    static func getRatingPercentLabelText(ratingPercent: Int?) -> String {
         let notAvailableStr: String = "N/A"
         
-        guard let sureRatingPercentage = ratingPercentage else {
+        guard let sureRatingPercent = ratingPercent else {
             return notAvailableStr
         }
         
-        if sureRatingPercentage == 0 {
+        if sureRatingPercent == 0 {
             return notAvailableStr
         } else {
-            return "\(sureRatingPercentage)%"
+            return "\(sureRatingPercent)%"
         }
     }
     
