@@ -17,10 +17,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool
     {
         // Override point for customization after application launch.
-        let VC = UIViewController()
-        VC.view.backgroundColor = UIColor.white
+        let presenter: MovieSearchPresenterProtocol = MovieSearchPresenter()
+        let vc = MovieSearchVC(presenter: presenter)
+        vc.view.backgroundColor = UIColor.white
+        let nc = UINavigationController(rootViewController: vc)
+        
         window = UIWindow(frame: UIScreen.main.bounds)
-        window?.rootViewController = VC
+        window?.rootViewController = nc
         window?.makeKeyAndVisible()
         return true
     }
