@@ -29,20 +29,12 @@ class MovieSearchVC: UIViewController {
 // MARK: - MovieSearchViewProtocol Conformation
 
 extension MovieSearchVC: MovieSearchViewProtocol {
-    var emptyTableLabelObject: LabelProtocol {
-        return emptyTableLabel
+    func updateEmptyTableLabelText(text: String) {
+        self.emptyTableLabel.text = text
     }
     
     func refreshTable() {
-        DispatchQueue.main.async {
-            self.tableView.reloadData()
-        }
-    }
-    
-    func updateVisibilityOfTableBackgroundView(setIsHidden: Bool) {
-        DispatchQueue.main.async {
-            self.tableView.backgroundView = setIsHidden ? nil : self.emptyTableLabel
-        }
+        self.tableView.reloadData()
     }
     
     func doBatchOperationsInTable(indexPathsToDelete: [IndexPath], indexPathsToInsert: [IndexPath]) {
@@ -87,20 +79,27 @@ extension MovieSearchVC {
 extension MovieSearchVC {
     private func loadSubviews() {
         loadSearchController()
-        loadTableView()
         loadEmptyTableLabel()
+        loadTableView()
     }
     
     private func loadTableView() {
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.separatorStyle = .none
-        
-        let rowHeight: CGFloat = cellOuterPadding * 2 + cellPosterHeight
-        tableView.rowHeight = rowHeight
+        tableView.keyboardDismissMode = .onDrag
+        tableView.backgroundColor = .clear
+        tableView.rowHeight = UITableView.automaticDimension
         
         // NOTE: Setting the estimatedRowHeight is necessary for the tableView delegate to behave properly
         // LINK: https://stackoverflow.com/a/57249122
-        tableView.estimatedRowHeight = rowHeight
+        tableView.estimatedRowHeight = 600
+        
+        // NOTE: Have to do manual contentInset adjustment because of white space on top of UITableView issue
+        // LINK: https://stackoverflow.com/q/39318740
+        tableView.contentInsetAdjustmentBehavior = .never
+        
+        // NOTE: Eliminate extra separators below UITableView
+        // LINK: https://stackoverflow.com/a/5377569
+        tableView.tableFooterView = UIView(frame: .zero)
         
         for cellType in MovieSearchTableCellType.allCases {
             cellType.registerResusableCell(tableView: tableView)
@@ -108,10 +107,6 @@ extension MovieSearchVC {
         
         tableView.dataSource = self
         tableView.delegate = self
-        
-        // NOTE: Eliminate extra separators below UITableView
-        // LINK: https://stackoverflow.com/a/5377569
-        tableView.tableFooterView = UIView(frame: .zero)
         view.addSubview(tableView)
     }
     
@@ -120,7 +115,6 @@ extension MovieSearchVC {
         searchController.searchBar.tintColor = .label
         searchController.searchBar.delegate = self
         navigationItem.searchController = searchController
-        searchController.isActive = true
     }
     
     private func loadEmptyTableLabel() {
@@ -128,13 +122,32 @@ extension MovieSearchVC {
         emptyTableLabel.textAlignment = .center
         view.addSubview(emptyTableLabel)
     }
+    
+    private func updateTableViewContentInsetWithSearchBarInNavBar() {
+        let statusBarHeight: CGFloat = view.window?.safeAreaInsets.top ?? 0
+        let searchBarInNavBarHeight: CGFloat = searchController.searchBar.bounds.height
+        let totalHeight: CGFloat = statusBarHeight + searchBarInNavBarHeight
+        self.tableView.contentInset = UIEdgeInsets(top: totalHeight, left: 0, bottom: 0, right: 0)
+    }
+    
+    private func updateTableViewContentInsetWithSearchBarBelowNavBar() {
+        let statusBarHeight: CGFloat = view.window?.safeAreaInsets.top ?? 0
+        
+        // NOTE: navigationController?.navigationBar.bounds.height is sometimes inaccurate with UISearchController,
+        // creating extra inset space, so we are using 44 here instead.
+        let navBarHeight: CGFloat = 44
+        
+        let searchBarHeight: CGFloat = searchController.searchBar.bounds.height
+        let totalHeight: CGFloat = statusBarHeight + navBarHeight + searchBarHeight
+        self.tableView.contentInset = UIEdgeInsets(top: totalHeight, left: 0, bottom: 0, right: 0)
+    }
 }
 
 // MARK: - Auto Layout Setup
 
 extension MovieSearchVC {
     private var views: [String: UIView] {
-        let dict: [String: UIView] = ["table": tableView]
+        let dict: [String: UIView] = ["table": tableView, "label": emptyTableLabel]
         return dict
     }
     
@@ -142,6 +155,8 @@ extension MovieSearchVC {
         var constraints: [NSLayoutConstraint] = []
         constraints += tableViewVConstraints
         constraints += tableViewHConstraints
+        constraints += emptyTableLabelVConstraints
+        constraints += emptyTableLabelHConstraints
         return constraints
     }
     
@@ -155,6 +170,21 @@ extension MovieSearchVC {
         return NSLayoutConstraint.constraints(withVisualFormat: VFLStr, options: [], metrics: nil, views: views)
     }
     
+    private var emptyTableLabelHConstraints: [NSLayoutConstraint] {
+        let VFLStr: String = "H:|[label]|"
+        return NSLayoutConstraint.constraints(withVisualFormat: VFLStr, options: [], metrics: nil, views: views)
+    }
+    
+    private var emptyTableLabelVConstraints: [NSLayoutConstraint] {
+        let constraint = emptyTableLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        return [constraint]
+    }
+    
+    private var emptyTableLabelHeightConstraints: [NSLayoutConstraint] {
+        let VFLStr: String = "V:[label(100)]"
+        return NSLayoutConstraint.constraints(withVisualFormat: VFLStr, options: [], metrics: nil, views: views)
+    }
+    
     private func activateLayoutConstraints() {
         NSLayoutConstraint.activate(allLayoutConstraints)
     }
@@ -165,6 +195,16 @@ extension MovieSearchVC {
 extension MovieSearchVC: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         presenter.handleSearchBarTextDidChange(searchText: searchText)
+    }
+    
+    func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
+        updateTableViewContentInsetWithSearchBarInNavBar()
+        return true
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        updateTableViewContentInsetWithSearchBarBelowNavBar()
+        presenter.handleSearchBarCancelButtonClicked()
     }
 }
 
@@ -182,29 +222,22 @@ extension MovieSearchVC: UITableViewDataSource {
         
         switch cellType {
         case .loadingCell:
-            guard let loadingCell = dequeuedCell as? LoadingTableViewCellProtocol else {
+            guard let loadingCell = dequeuedCell as? LoadingTableViewCell else {
                 return dequeuedCell
             }
             
-            let updatedLoadingCell = presenter.getUpdatedLoadingCell(cell: loadingCell)
-            
-            guard let updatedUIKitLoadingCell = updatedLoadingCell as? LoadingTableViewCell else {
-                return dequeuedCell
-            }
-            
-            return updatedUIKitLoadingCell
+            let updatedLoadingCell = Self.getUpdatedLoadingTableViewCell(loadingCell: loadingCell)
+            return updatedLoadingCell
         case .movieCell:
-            guard let movieCell = dequeuedCell as? MovieListTableViewCellProtocol else {
+            guard let movieCell = dequeuedCell as? MovieListTableViewCell,
+                  let movieCellViewData = presenter.getMovieCellViewData(indexPath: indexPath) else
+            {
                 return dequeuedCell
             }
             
-            let updatedMovieCell = presenter.getUpdatedMovieCell(cell: movieCell, indexPath: indexPath)
-            
-            guard let updatedUIKitMovieCell = updatedMovieCell as? MovieListTableViewCell else {
-                return dequeuedCell
-            }
-            
-            return updatedUIKitMovieCell
+            let updatedMovieCell = Self.getUpdatedMovieListTableViewCell(movieCell: movieCell,
+                                                                         movieCellViewData: movieCellViewData)
+            return updatedMovieCell
         }
     }
 }
@@ -216,9 +249,8 @@ extension MovieSearchVC: UITableViewDelegate {
         presenter.handleWillDisplayCellAtIndexPath(indexPath: indexPath)
     }
     
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        searchController.searchBar.resignFirstResponder()
-    }
+    // TODO: make the detail page with backdrop image, user rating, overview, and play trailer button and push to the
+    // detail page upon tableView(_:didSelectRowAt:) being called.
 }
 
 // MARK: - UIKit Related Extension of MovieSearchTableCellType
@@ -235,5 +267,28 @@ private extension MovieSearchTableCellType {
         case .movieCell:
             return MovieListTableViewCell.self
         }
+    }
+}
+
+// MARK: - Getters
+
+extension MovieSearchVC {
+    static func getUpdatedLoadingTableViewCell(loadingCell: LoadingTableViewCell) -> LoadingTableViewCell {
+        loadingCell.loadingSpinner.startAnimating()
+        return loadingCell
+    }
+    
+    static func getUpdatedMovieListTableViewCell(movieCell: MovieListTableViewCell,
+                                                 movieCellViewData: MovieCellViewData) -> MovieListTableViewCell
+    {
+        movieCell.posterImageView.updateImageByRemoteURL(imageURLStr: movieCellViewData.imageURLStr)
+        movieCell.titleLabel.text = movieCellViewData.titleLabelStr
+        movieCell.ratingRingView.percentLabel.text = movieCellViewData.percentLabelStr
+        movieCell.ratingRingView.updateRingFill(percentage: movieCellViewData.ringFillPercent,
+                                                ringHexColorStr: movieCellViewData.ringFillHexColorStr,
+                                                animated: false)
+        movieCell.dateLabel.text = movieCellViewData.dateLabelStr
+        movieCell.overviewLabel.text = movieCellViewData.overviewLabelStr
+        return movieCell
     }
 }

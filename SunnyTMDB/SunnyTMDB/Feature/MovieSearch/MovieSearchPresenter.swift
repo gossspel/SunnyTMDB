@@ -7,52 +7,19 @@
 
 import Foundation
 
-protocol PresenterProtocol: AnyObject {
-    func doInitialSetup()
-}
-
-protocol MovieSearchPresenterProtocol: PresenterProtocol {
-    var numberOfRowsInTable: Int { get }
-    
-    func attachView(view: MovieSearchViewProtocol)
-    func handleSearchBarTextDidChange(searchText: String)
-    func getCellTypeAtIndexPath(indexPath: IndexPath) -> MovieSearchTableCellType
-    func getCellReuseIDAtIndexPath(indexPath: IndexPath) -> String
-    func handleWillDisplayCellAtIndexPath(indexPath: IndexPath)
-    func getUpdatedLoadingCell(cell: LoadingTableViewCellProtocol) -> LoadingTableViewCellProtocol
-    func getUpdatedMovieCell(cell: MovieListTableViewCellProtocol,
-                             indexPath: IndexPath) -> MovieListTableViewCellProtocol?
-}
-
-enum MovieSearchTableCellType: String, CaseIterable {
-    case movieCell
-    case loadingCell
-    
-    var cellReuseID: String {
-        switch self {
-        case .movieCell:
-            return "MovieListTableViewCell"
-        case .loadingCell:
-            return "LoadingTableViewCell"
-        }
-    }
-}
-
-struct MovieSearchTableCellData {
-    let cellType: MovieSearchTableCellType
-    let movieDTO: MovieDTO?
-}
-
 class MovieSearchPresenter {
     weak private var view: MovieSearchViewProtocol?
     private let movieImageBaseURLStr: String
+    private let movieSearchService: MovieSearchDataServiceProtocol
     private var searchTask: DispatchWorkItem?
-    private var movieSearchService: MovieSearchDataServiceProtocol
-    private var cellDataList: [MovieSearchTableCellData] = []
     
-    private var currentPage: Int = 1
-    private var totalPagesCount: Int = 1
+    var cellDataList: [MovieSearchTableCellData] = []
+    var currentPage: Int = 1
+    var totalPagesCount: Int = 1
     private var currentSearchText: String = ""
+    
+    let movieSearchResultUpdateQueue: DispatchQueue = DispatchQueue(label: "movieSearchResultUpdateQueue",
+                                                                    attributes: .concurrent)
     
     private static let defaultMovieImageBaseURLStr: String = "https://image.tmdb.org/t/p/w154"
     
@@ -61,11 +28,6 @@ class MovieSearchPresenter {
     {
         self.movieSearchService = movieSearchService
         self.movieImageBaseURLStr = movieImageBaseURLStr
-    }
-    
-    private func refreshUI() {
-        view?.refreshTable()
-        view?.updateVisibilityOfTableBackgroundView(setIsHidden: !cellDataList.isEmpty)
     }
 }
 
@@ -81,7 +43,7 @@ extension MovieSearchPresenter: MovieSearchPresenterProtocol {
     }
     
     func doInitialSetup() {
-        refreshUI()
+        showEmptyResultsFromSearch()
     }
     
     func handleSearchBarTextDidChange(searchText: String) {
@@ -95,17 +57,26 @@ extension MovieSearchPresenter: MovieSearchPresenterProtocol {
                 return
             }
             
-            strongSelf.currentPage = 1
-            strongSelf.totalPagesCount = 1
+            strongSelf.resetSearchDataToDefaultState()
             strongSelf.currentSearchText = searchText
-            strongSelf.doGetCallViaMovieSearchService(searchText: searchText, page: strongSelf.currentPage)
+            
+            if searchText.isEmpty {
+                strongSelf.showEmptyResultsFromSearch()
+            } else {
+                strongSelf.doGetCallViaMovieSearchService(searchText: searchText, page: strongSelf.currentPage)
+            }
         }
         
         let newSearchTask = DispatchWorkItem(block: taskBlock)
         searchTask = newSearchTask
         
-        let deadline: DispatchTime = DispatchTime.now() + 0.75
+        let deadline: DispatchTime = DispatchTime.now() + 0.5
         DispatchQueue.global(qos: .userInteractive).asyncAfter(deadline: deadline, execute: newSearchTask)
+    }
+    
+    func handleSearchBarCancelButtonClicked() {
+        resetSearchDataToDefaultState()
+        showEmptyResultsFromSearch()
     }
     
     func getCellTypeAtIndexPath(indexPath: IndexPath) -> MovieSearchTableCellType {
@@ -139,56 +110,70 @@ extension MovieSearchPresenter: MovieSearchPresenterProtocol {
         }
     }
     
-    func getUpdatedLoadingCell(cell: LoadingTableViewCellProtocol) -> LoadingTableViewCellProtocol {
-        cell.startSpinning()
-        return cell
-    }
-    
-    func getUpdatedMovieCell(cell: MovieListTableViewCellProtocol,
-                             indexPath: IndexPath) -> MovieListTableViewCellProtocol?
-    {        
+    func getMovieCellViewData(indexPath: IndexPath) -> MovieCellViewData? {
         guard indexPath.row < cellDataList.count, let movieDTO = cellDataList[indexPath.row].movieDTO else {
             return nil
         }
         
         let imageURLStr = getMovieImageURLStr(imageFileURI: movieDTO.posterURI)
-        cell.posterImageViewObject.updateImageByRemoteURL(imageURLStr: imageURLStr)
-        cell.titleLabelObject.updateLabelText(text: movieDTO.title)
-        cell.dateLabelObject.updateLabelText(text: movieDTO.releaseDateStr)
-        let ratingPercentage: Int = Int(movieDTO.rating * 10)
-        let hexColorStr = Self.getHexColorStr(ratingPercentage: ratingPercentage)
-        cell.ratingRingViewObject.updateRingFill(percentage: ratingPercentage,
-                                                 ringHexColorStr: hexColorStr,
-                                                 animated: false)
-        cell.ratingRingViewObject.percentLabelObject.updateLabelText(text: "\(ratingPercentage)%")
-        return cell
+        let percentLabelStr = Self.getRatingPercentageLabelText(ratingPercentage: movieDTO.ratingPercentage)
+        let ringFillHexColorStr = Self.getHexColorStr(ratingPercentage: movieDTO.ratingPercentage)
+        
+        let cellViewData = MovieCellViewData(imageURLStr: imageURLStr,
+                                             titleLabelStr: movieDTO.title,
+                                             overviewLabelStr: movieDTO.overview,
+                                             dateLabelStr: movieDTO.releaseDateStr,
+                                             percentLabelStr: percentLabelStr,
+                                             ringFillPercent: movieDTO.ratingPercentage ?? 0,
+                                             ringFillHexColorStr: ringFillHexColorStr)
+        return cellViewData
     }
 }
 
-// MARK: - Service Related
+// MARK: - MovieSearchPresenterTestableProtocol Conformation
 
-extension MovieSearchPresenter {
-    static func getMovieSearchGetRequestParam(searchText: String, page: Int) -> MovieSearchGetRequestParam {
-        // Encode the query as indicated
-        // LINK: https://developers.themoviedb.org/3/search/search-companies
-        // LINK: https://www.advancedswift.com/a-guide-to-urls-in-swift/#url-encode-a-string
-        let query = searchText.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
-        return MovieSearchGetRequestParam(query: query, page: page)
+extension MovieSearchPresenter: MovieSearchPresenterTestableProtocol {
+    func resetSearchDataToDefaultState() {
+        cellDataList = []
+        currentPage = 1
+        totalPagesCount = 1
+        currentSearchText = ""
     }
     
-    private func doGetCallViaMovieSearchService(searchText: String, page: Int) {
-        let param = Self.getMovieSearchGetRequestParam(searchText: searchText, page: page)
+    func showEmptyResultsFromSearch() {
+        DispatchQueue.main.async {
+            self.view?.updateEmptyTableLabelText(text: self.emptyTableReason.displayStr)
+            self.resetSearchDataToDefaultState()
+            self.view?.refreshTable()
+        }
+    }
+    
+    func doGetCallViaMovieSearchService(searchText: String, page: Int) {
+        let param = MovieSearchGetRequestParam(query: searchText, page: page)
         movieSearchService.sendGetRequest(param: param,
                                           successHandler: handleMovieSearchResultResponse,
                                           failureHandler: handleMovieSearchFailureResponse)
     }
     
-    // TODO: write test for this to make sure multiple simultaneous call results in 1 displayNextPaginatedSearchResult
-    // call
-    private func handleMovieSearchResultResponse(result: MovieSearchResultDTO) {
-        DispatchQueue.global(qos: .userInteractive).async(flags: .barrier) {
+    func handleMovieSearchResultResponse(result: MovieSearchResultDTO) {
+        // NOTE: async barrier task only works on custom concurrent queues, but not global concurrent queues
+        // LINK: https://stackoverflow.com/a/58238703
+        movieSearchResultUpdateQueue.async(flags: .barrier) { [weak self] in
+            guard let self = ConsoleUtility.validate(optional: self) else {
+                return
+            }
+            
             if self.currentPage > 1 && (self.currentPage == result.currentPage) {
                 ConsoleUtility.printConsoleMessage(messageType: .warning, message: "redundant page \(self.currentPage)")
+                return
+            }
+            
+            guard ConsoleUtility.validate(condition: self.currentPage <= result.currentPage) else {
+                return
+            }
+            
+            if result.movies.isEmpty {
+                self.showEmptyResultsFromSearch()
                 return
             }
             
@@ -203,7 +188,7 @@ extension MovieSearchPresenter {
         }
     }
     
-    private func displayBrandNewSearchResult(result: MovieSearchResultDTO) {
+    func displayBrandNewSearchResult(result: MovieSearchResultDTO) {
         let isCurrentPageTheLastPage: Bool = result.currentPage == result.totalPagesCount
         
         cellDataList = result.movies.map { MovieSearchTableCellData(cellType: .movieCell, movieDTO: $0) }
@@ -212,10 +197,12 @@ extension MovieSearchPresenter {
             cellDataList.append(MovieSearchTableCellData(cellType: .loadingCell, movieDTO: nil))
         }
         
-        refreshUI()
+        DispatchQueue.main.async {
+            self.view?.refreshTable()
+        }
     }
     
-    private func displayNextPaginatedSearchResult(result: MovieSearchResultDTO) {
+    func displayNextPaginatedSearchResult(result: MovieSearchResultDTO) {
         let isCurrentPageTheLastPage: Bool = result.currentPage == result.totalPagesCount
 
         // NOTE: remove any loading cell from cellDataList
@@ -233,35 +220,58 @@ extension MovieSearchPresenter {
         }
 
         // NOTE: update the table rows to reflect the datasource update.
-        view?.doBatchOperationsInTable(indexPathsToDelete: indexPathsToDelete,
-                                       indexPathsToInsert: indexPathsToInsert)
+        DispatchQueue.main.async {
+            self.view?.doBatchOperationsInTable(indexPathsToDelete: indexPathsToDelete,
+                                                indexPathsToInsert: indexPathsToInsert)
+        }
     }
     
-    private func handleMovieSearchFailureResponse(statusCode: HTTPStatusCode?) {
-        cellDataList = []
-        currentPage = 1
-        totalPagesCount = 1
-        currentSearchText = ""
-        view?.emptyTableLabelObject.updateLabelText(text: "No movies found! Try searching again...")
-        refreshUI()
+    func handleMovieSearchFailureResponse(statusCode: HTTPStatusCode?) {
+        showEmptyResultsFromSearch()
     }
 }
 
 // MARK: - Utils
 
 extension MovieSearchPresenter {
-    static func getHexColorStr(ratingPercentage: Int) -> String {
+    var emptyTableReason: EmptyMovieSearchTableReason {
+        if currentSearchText.isEmpty {
+            return .noSearchQuery
+        } else {
+            return .noMoviesFromSearch
+        }
+    }
+    
+    static func getHexColorStr(ratingPercentage: Int?) -> String? {
+        guard let sureRatingPercentage = ratingPercentage else {
+            return nil
+        }
+        
         let hexColorStr: String
         
-        if ratingPercentage >= 70 {
+        if sureRatingPercentage >= 70 {
             hexColorStr = "#21d07a" // green
-        } else if ratingPercentage < 35 {
+        } else if sureRatingPercentage < 35 {
             hexColorStr = "#db2360" // red
         } else {
             hexColorStr = "#d2d531" // yellow
         }
         
         return hexColorStr
+    }
+    
+    static func getRatingPercentageLabelText(ratingPercentage: Int?) -> String {
+        let notAvailableStr: String = "N/A"
+        
+        guard let sureRatingPercentage = ratingPercentage else {
+            return notAvailableStr
+        }
+        
+        if sureRatingPercentage == 0 {
+            return notAvailableStr
+        } else {
+            return "\(sureRatingPercentage)%"
+        }
     }
     
     func getMovieImageURLStr(imageFileURI: String?) -> String? {

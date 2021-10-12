@@ -8,10 +8,12 @@
 import UIKit
 
 class MovieListTableViewCell: UITableViewCell {
-    private let posterImageView: UIImageView = UIImageView()
-    private let ratingRingView: RingPercentView = RingPercentView()
-    private let titleLabel: UILabel = UILabel()
-    private let dateLabel: UILabel = UILabel()
+    let posterImageView: UIImageView = UIImageView()
+    let ratingRingView: RingPercentView = RingPercentView()
+    let titleLabel: UILabel = UILabel()
+    let dateLabel: UILabel = UILabel()
+    let overviewLabel: UILabel = UILabel()
+    
     private var outerPadding: CGFloat = 16
     private var innerPadding: CGFloat = 8
     private var posterHeight: CGFloat = 150
@@ -21,7 +23,7 @@ class MovieListTableViewCell: UITableViewCell {
     }
     
     private var titleHeight: CGFloat {
-        return posterHeight - innerPadding - ratingHeight
+        return posterHeight / 3
     }
     
     private var ratingHeight: CGFloat {
@@ -47,41 +49,6 @@ class MovieListTableViewCell: UITableViewCell {
     }
 }
 
-// MARK: - MovieListTableViewCellProtocol Conformation
-
-extension MovieListTableViewCell: MovieListTableViewCellProtocol {
-    var titleLabelObject: LabelProtocol {
-        return titleLabel
-    }
-    
-    var dateLabelObject: LabelProtocol {
-        return dateLabel
-    }
-    
-    var posterImageViewObject: ImageViewProtocol {
-        return posterImageView
-    }
-    
-    var ratingRingViewObject: RingPercentViewProtocol {
-        return ratingRingView
-    }
-    
-    func updateOuterPadding(padding: Float) {
-        self.outerPadding = CGFloat(padding)
-        setNeedsUpdateConstraints()
-    }
-    
-    func updateInnerPadding(padding: Float) {
-        self.innerPadding = CGFloat(padding)
-        setNeedsUpdateConstraints()
-    }
-    
-    func updatePosterHeight(height: Float) {
-        self.posterHeight = CGFloat(height)
-        setNeedsUpdateConstraints()
-    }
-}
-
 // MARK: - UITableViewCell Overrride
 
 extension MovieListTableViewCell {    
@@ -99,6 +66,7 @@ extension MovieListTableViewCell {
         loadRatingRingView()
         loadTitleLabel()
         loadDateLabel()
+        loadOverviewLabel()
         
         // NOTE: Call setNeedsUpdateConstraints() after adding subviews
         // LINK: https://stackoverflow.com/a/15895048
@@ -125,6 +93,12 @@ extension MovieListTableViewCell {
         dateLabel.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(dateLabel)
     }
+    
+    private func loadOverviewLabel() {
+        overviewLabel.translatesAutoresizingMaskIntoConstraints = false
+        overviewLabel.numberOfLines = 0
+        contentView.addSubview(overviewLabel)
+    }
 }
 
 // MARK: - Auto Layout Setup
@@ -134,7 +108,8 @@ extension MovieListTableViewCell {
         let dict: [String: UIView] = ["poster": posterImageView,
                                       "rating": ratingRingView,
                                       "title": titleLabel,
-                                      "date": dateLabel]
+                                      "date": dateLabel,
+                                      "overview": overviewLabel]
         return dict
     }
     
@@ -146,16 +121,28 @@ extension MovieListTableViewCell {
         constraints += dateLabelVConstraints
         constraints += posterAndTitleHConstraints
         constraints += posterAndRatingRingAndDateHConstraints
+        constraints += overviewLabelVConstraints
+        constraints += overviewLabelHConstraints
         return constraints
     }
     
     private var posterImageViewVConstraints: [NSLayoutConstraint] {
-        let VFLStr = "V:|-\(outerPadding)-[poster(\(posterHeight))]-\(outerPadding)-|"
+        let VFLStr = "V:|-\(outerPadding)-[poster(\(posterHeight))]"
+        return NSLayoutConstraint.constraints(withVisualFormat: VFLStr, options: [], metrics: nil, views: views)
+    }
+    
+    private var overviewLabelVConstraints: [NSLayoutConstraint] {
+        let VFLStr = "V:[poster]-\(innerPadding)-[overview]-\(outerPadding)-|"
+        return NSLayoutConstraint.constraints(withVisualFormat: VFLStr, options: [], metrics: nil, views: views)
+    }
+    
+    private var overviewLabelHConstraints: [NSLayoutConstraint] {
+        let VFLStr = "H:|-\(outerPadding)-[overview]-\(outerPadding)-|"
         return NSLayoutConstraint.constraints(withVisualFormat: VFLStr, options: [], metrics: nil, views: views)
     }
     
     private var ratingRingViewVConstraints: [NSLayoutConstraint] {
-        let VFLStr = "V:[rating(\(ratingHeight))]-\(outerPadding)-|"
+        let VFLStr = "V:[title]-\(innerPadding)-[rating(\(ratingHeight))]"
         return NSLayoutConstraint.constraints(withVisualFormat: VFLStr, options: [], metrics: nil, views: views)
     }
     
@@ -165,7 +152,7 @@ extension MovieListTableViewCell {
     }
     
     private var dateLabelVConstraints: [NSLayoutConstraint] {
-        let VFLStr = "V:[date(\(dateHeight))]-\(outerPadding)-|"
+        let VFLStr = "V:[title]-\(innerPadding)-[date(\(dateHeight))]"
         return NSLayoutConstraint.constraints(withVisualFormat: VFLStr, options: [], metrics: nil, views: views)
     }
     

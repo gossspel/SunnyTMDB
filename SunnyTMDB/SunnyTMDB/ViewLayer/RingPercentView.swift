@@ -8,9 +8,10 @@
 import UIKit
 
 class RingPercentView: UIView {
+    let percentLabel = UILabel()
+    
     private let baseRingLayer = CAShapeLayer()
     private let ringFillLayer = CAShapeLayer()
-    private let percentLabel = UILabel()
     private let ringView = UIView()
     private let baseRingColor: UIColor
     private var ringFillColor: UIColor
@@ -39,32 +40,28 @@ class RingPercentView: UIView {
     }
 }
 
-// MARK: - RingPercentViewProtocol Conformation
+// MARK: - Method to update RingPercentView
 
-extension RingPercentView: RingPercentViewProtocol {
-    var percentLabelObject: LabelProtocol {
-        return percentLabel
-    }
-    
+// TODO: rename all percentage to percent
+
+extension RingPercentView {
     func updateRingFill(percentage: Int, ringHexColorStr: String?, animated: Bool) {
-        DispatchQueue.main.async {
-            if let sureRingHexColorStr = ringHexColorStr, let newColor = UIColor(hexColorStr: sureRingHexColorStr) {
-                self.ringFillColor = newColor
-                self.ringFillLayer.strokeColor = self.ringFillColor.cgColor
-            }
-        
-            let fillDecimal: CGFloat = CGFloat(Float(percentage) / 100)
-            if animated {
-                let animation = CABasicAnimation(keyPath: "strokeEnd")
-                animation.fromValue = 0
-                animation.duration = self.animationDurationInSeconds
-                animation.toValue = fillDecimal
-                animation.fillMode = .forwards
-                animation.isRemovedOnCompletion = false
-                self.ringFillLayer.add(animation, forKey: nil)
-            } else {
-                self.ringFillLayer.strokeEnd = fillDecimal
-            }
+        if let sureRingHexColorStr = ringHexColorStr, let newColor = UIColor(hexColorStr: sureRingHexColorStr) {
+            self.ringFillColor = newColor
+            self.ringFillLayer.strokeColor = self.ringFillColor.cgColor
+        }
+    
+        let fillDecimal: CGFloat = CGFloat(Float(percentage) / 100)
+        if animated {
+            let animation = CABasicAnimation(keyPath: "strokeEnd")
+            animation.fromValue = 0
+            animation.duration = self.animationDurationInSeconds
+            animation.toValue = fillDecimal
+            animation.fillMode = .forwards
+            animation.isRemovedOnCompletion = false
+            self.ringFillLayer.add(animation, forKey: nil)
+        } else {
+            self.ringFillLayer.strokeEnd = fillDecimal
         }
     }
 }
@@ -130,7 +127,7 @@ extension RingPercentView {
         ringFillLayer.fillColor = UIColor.clear.cgColor
         ringFillLayer.lineWidth = ringWidth
         ringFillLayer.lineCap = .round
-        ringFillLayer.strokeColor = ringFillColor.cgColor
+        ringFillLayer.strokeColor = UIColor.clear.cgColor
         ringView.layer.addSublayer(ringFillLayer)
     }
     

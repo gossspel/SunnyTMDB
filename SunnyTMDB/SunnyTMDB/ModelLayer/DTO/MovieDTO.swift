@@ -8,11 +8,11 @@
 import Foundation
 
 struct MovieDTO: Codable {
-    let title: String
-    let overview: String
-    let releaseDateStr: String
+    let title: String?
+    let overview: String?
+    let releaseDateStr: String?
     let posterURI: String?
-    let rating: Double
+    let rating: Double?
     let genreIDs: [Int]?
     
     enum CodingKeys: String, CodingKey {
@@ -22,5 +22,17 @@ struct MovieDTO: Codable {
         case posterURI = "poster_path"
         case rating = "vote_average"
         case genreIDs = "genre_ids"
+    }
+}
+
+// MARK: - computed properties 
+
+extension MovieDTO {
+    var ratingPercentage: Int? {
+        guard let sureRating = rating else {
+            return nil
+        }
+        
+        return Int(sureRating * 10)
     }
 }

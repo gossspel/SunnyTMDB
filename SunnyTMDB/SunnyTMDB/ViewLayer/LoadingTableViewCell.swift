@@ -8,8 +8,8 @@
 import UIKit
 
 class LoadingTableViewCell: UITableViewCell {
-    private var overallHeight: CGFloat = 182
-    private let loadingSpinner: UIActivityIndicatorView = UIActivityIndicatorView(style: .large)
+    private var outerPadding: CGFloat = 32
+    let loadingSpinner: UIActivityIndicatorView = UIActivityIndicatorView(style: .large)
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -20,19 +20,6 @@ class LoadingTableViewCell: UITableViewCell {
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-}
-
-// MARK: - LoadingTableViewCellProtocol Conformation
-
-extension LoadingTableViewCell: LoadingTableViewCellProtocol {
-    func updateOverallHeight(height: Float) {
-        self.overallHeight = CGFloat(height)
-        setNeedsUpdateConstraints()
-    }
-    
-    func startSpinning() {
-        loadingSpinner.startAnimating()
     }
 }
 
@@ -84,8 +71,8 @@ extension LoadingTableViewCell {
     }
     
     private var loadingSpinnerVConstraints: [NSLayoutConstraint] {
-        let constraint = loadingSpinner.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
-        return [constraint]
+        let VFLStr = "V:|-\(outerPadding)-[loadingSpinner]-\(outerPadding)-|"
+        return NSLayoutConstraint.constraints(withVisualFormat: VFLStr, options: [], metrics: nil, views: views)
     }
     
     private func setUpAndActivateLayoutConstraints() {
