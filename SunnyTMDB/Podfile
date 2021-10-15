@@ -6,6 +6,7 @@ use_frameworks!
 target 'SunnyTMDB' do
   pod 'Alamofire', '~> 5.4'
   pod 'Kingfisher', '~> 6.3'
+  pod "youtube-ios-player-helper", "~> 1.0.3"
 end
 
 post_install do |installer|
