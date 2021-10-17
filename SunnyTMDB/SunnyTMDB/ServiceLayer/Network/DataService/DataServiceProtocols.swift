@@ -9,6 +9,6 @@ import Foundation
 
 protocol MovieSearchDataServiceProtocol: AnyObject {
     func sendGetRequest(param: MovieSearchGetRequestParam,
-                        successHandler: @escaping (MovieSearchResultDTO) -> Void,
+                        successHandler: @escaping (GetSearchMovieResponseDTO) -> Void,
                         failureHandler: ((HTTPStatusCode?) -> Void)?)
 }

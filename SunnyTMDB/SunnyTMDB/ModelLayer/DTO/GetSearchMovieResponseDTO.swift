@@ -1,5 +1,5 @@
 //
-//  MovieSearchResultDTO.swift
+//  GetSearchMovieResponseDTO.swift
 //  SunnyTMDB
 //
 //  Created by Sunny Chan on 9/12/21.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct MovieSearchResultDTO: Codable {
+struct GetSearchMovieResponseDTO: Codable {
     let currentPage: Int
     let totalPagesCount: Int
     let movies: [MovieDTO]

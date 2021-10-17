@@ -155,7 +155,7 @@ extension MovieSearchPresenter: MovieSearchPresenterTestableProtocol {
                                           failureHandler: handleMovieSearchFailureResponse)
     }
     
-    func handleMovieSearchResultResponse(result: MovieSearchResultDTO) {
+    func handleMovieSearchResultResponse(result: GetSearchMovieResponseDTO) {
         // NOTE: async barrier task only works on custom concurrent queues, but not global concurrent queues
         // LINK: https://stackoverflow.com/a/58238703
         movieSearchResultUpdateQueue.async(flags: .barrier) { [weak self] in
@@ -188,7 +188,7 @@ extension MovieSearchPresenter: MovieSearchPresenterTestableProtocol {
         }
     }
     
-    func displayBrandNewSearchResult(result: MovieSearchResultDTO) {
+    func displayBrandNewSearchResult(result: GetSearchMovieResponseDTO) {
         let isCurrentPageTheLastPage: Bool = result.currentPage == result.totalPagesCount
         
         cellDataList = result.movies.map { MovieSearchTableCellData(cellType: .movieCell, movieDTO: $0) }
@@ -202,7 +202,7 @@ extension MovieSearchPresenter: MovieSearchPresenterTestableProtocol {
         }
     }
     
-    func displayNextPaginatedSearchResult(result: MovieSearchResultDTO) {
+    func displayNextPaginatedSearchResult(result: GetSearchMovieResponseDTO) {
         let isCurrentPageTheLastPage: Bool = result.currentPage == result.totalPagesCount
 
         // NOTE: remove any loading cell from cellDataList

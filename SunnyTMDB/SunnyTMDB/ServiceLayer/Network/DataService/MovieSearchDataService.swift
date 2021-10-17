@@ -20,12 +20,11 @@ struct MovieSearchGetRequestParam {
 class MovieSearchDataService {
     private static let defaultURIStr: String = "/search/movie"
     
-    var apiClient: APIClientProtocol
-    var uriStr: String
+    let apiClient: APIClientProtocol
+    let uriStr: String = defaultURIStr
     
-    init(apiClient: APIClientProtocol = TMDBAPIClient.defaultInstance, uriStr: String = defaultURIStr) {
+    init(apiClient: APIClientProtocol = TMDBAPIClient.defaultInstance) {
         self.apiClient = apiClient
-        self.uriStr = uriStr
     }
 }
 
@@ -33,7 +32,7 @@ class MovieSearchDataService {
 
 extension MovieSearchDataService: MovieSearchDataServiceProtocol {
     func sendGetRequest(param: MovieSearchGetRequestParam,
-                        successHandler: @escaping (MovieSearchResultDTO) -> Void,
+                        successHandler: @escaping (GetSearchMovieResponseDTO) -> Void,
                         failureHandler: ((HTTPStatusCode?) -> Void)?)
     {
         let jsonHandler = JSONCoderUtility.getJSONHandler(successHandler: successHandler,

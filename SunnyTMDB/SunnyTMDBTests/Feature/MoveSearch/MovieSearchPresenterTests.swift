@@ -88,14 +88,17 @@ extension MovieSearchPresenterTests {
         }
     }
     
-    static func getMockResult(numberOfMovies: Int, currentPage: Int, totalPagesCount: Int) -> MovieSearchResultDTO {
+    static func getMockResult(numberOfMovies: Int,
+                              currentPage: Int,
+                              totalPagesCount: Int) -> GetSearchMovieResponseDTO
+    {
         var movies: [MovieDTO] = []
         for _ in 0..<numberOfMovies {
             movies.append(MovieDTO(title: "", overview: "", releaseDateStr: "", posterURI: "", rating: 0, genreIDs: []))
         }
-        let result = MovieSearchResultDTO(currentPage: currentPage,
-                                          totalPagesCount: totalPagesCount,
-                                          movies: movies)
+        let result = GetSearchMovieResponseDTO(currentPage: currentPage,
+                                               totalPagesCount: totalPagesCount,
+                                               movies: movies)
         return result
     }
     
@@ -120,9 +123,9 @@ extension MovieSearchPresenterTests {
         presenter.attachView(view: view)
         
         let numberOfMovies: Int = 10
-        let mockResult: MovieSearchResultDTO = Self.getMockResult(numberOfMovies: numberOfMovies,
-                                                                  currentPage: scenario.resultCurrentPage,
-                                                                  totalPagesCount: scenario.resultTotalPagesCount)
+        let mockResult: GetSearchMovieResponseDTO = Self.getMockResult(numberOfMovies: numberOfMovies,
+                                                                       currentPage: scenario.resultCurrentPage,
+                                                                       totalPagesCount: scenario.resultTotalPagesCount)
         
         presenter.handleMovieSearchResultResponse(result: mockResult)
         presenter.movieSearchResultUpdateQueue.sync { [weak presenter] in
@@ -169,9 +172,9 @@ extension MovieSearchPresenterTests {
         presenter.attachView(view: view)
         
         let numberOfMovies: Int = 10
-        let mockResult: MovieSearchResultDTO = Self.getMockResult(numberOfMovies: numberOfMovies,
-                                                                  currentPage: scenario.resultCurrentPage,
-                                                                  totalPagesCount: scenario.resultTotalPagesCount)
+        let mockResult: GetSearchMovieResponseDTO = Self.getMockResult(numberOfMovies: numberOfMovies,
+                                                                       currentPage: scenario.resultCurrentPage,
+                                                                       totalPagesCount: scenario.resultTotalPagesCount)
         
         presenter.handleMovieSearchResultResponse(result: mockResult)
         presenter.movieSearchResultUpdateQueue.sync { [weak presenter] in
@@ -218,9 +221,9 @@ extension MovieSearchPresenterTests {
         presenter.attachView(view: view)
         
         let numberOfMovies: Int = 10
-        let mockResult: MovieSearchResultDTO = Self.getMockResult(numberOfMovies: numberOfMovies,
-                                                                  currentPage: scenario.resultCurrentPage,
-                                                                  totalPagesCount: scenario.resultTotalPagesCount)
+        let mockResult: GetSearchMovieResponseDTO = Self.getMockResult(numberOfMovies: numberOfMovies,
+                                                                       currentPage: scenario.resultCurrentPage,
+                                                                       totalPagesCount: scenario.resultTotalPagesCount)
         
         presenter.handleMovieSearchResultResponse(result: mockResult)
         presenter.movieSearchResultUpdateQueue.sync { [weak presenter] in
@@ -267,9 +270,9 @@ extension MovieSearchPresenterTests {
         presenter.attachView(view: view)
         
         let numberOfMovies: Int = 10
-        let mockResult: MovieSearchResultDTO = Self.getMockResult(numberOfMovies: numberOfMovies,
-                                                                  currentPage: scenario.resultCurrentPage,
-                                                                  totalPagesCount: scenario.resultTotalPagesCount)
+        let mockResult: GetSearchMovieResponseDTO = Self.getMockResult(numberOfMovies: numberOfMovies,
+                                                                       currentPage: scenario.resultCurrentPage,
+                                                                       totalPagesCount: scenario.resultTotalPagesCount)
         
         presenter.handleMovieSearchResultResponse(result: mockResult)
         presenter.movieSearchResultUpdateQueue.sync { [weak presenter] in
@@ -316,9 +319,9 @@ extension MovieSearchPresenterTests {
         presenter.attachView(view: view)
         
         let numberOfMovies: Int = 10
-        let mockResult: MovieSearchResultDTO = Self.getMockResult(numberOfMovies: numberOfMovies,
-                                                                  currentPage: scenario.resultCurrentPage,
-                                                                  totalPagesCount: scenario.resultTotalPagesCount)
+        let mockResult: GetSearchMovieResponseDTO = Self.getMockResult(numberOfMovies: numberOfMovies,
+                                                                       currentPage: scenario.resultCurrentPage,
+                                                                       totalPagesCount: scenario.resultTotalPagesCount)
         
         presenter.handleMovieSearchResultResponse(result: mockResult)
         presenter.movieSearchResultUpdateQueue.sync { [weak presenter] in
@@ -363,9 +366,9 @@ extension MovieSearchPresenterTests {
         presenter.attachView(view: view)
         
         let numberOfMovies: Int = 10
-        let mockResult: MovieSearchResultDTO = Self.getMockResult(numberOfMovies: numberOfMovies,
-                                                                  currentPage: scenario.resultCurrentPage,
-                                                                  totalPagesCount: scenario.resultTotalPagesCount)
+        let mockResult: GetSearchMovieResponseDTO = Self.getMockResult(numberOfMovies: numberOfMovies,
+                                                                       currentPage: scenario.resultCurrentPage,
+                                                                       totalPagesCount: scenario.resultTotalPagesCount)
         
         presenter.handleMovieSearchResultResponse(result: mockResult)
         presenter.movieSearchResultUpdateQueue.sync { [weak presenter] in
@@ -410,9 +413,9 @@ extension MovieSearchPresenterTests {
         presenter.attachView(view: view)
         
         let numberOfMovies: Int = 10
-        let mockResult: MovieSearchResultDTO = Self.getMockResult(numberOfMovies: numberOfMovies,
-                                                                  currentPage: scenario.resultCurrentPage,
-                                                                  totalPagesCount: scenario.resultTotalPagesCount)
+        let mockResult: GetSearchMovieResponseDTO = Self.getMockResult(numberOfMovies: numberOfMovies,
+                                                                       currentPage: scenario.resultCurrentPage,
+                                                                       totalPagesCount: scenario.resultTotalPagesCount)
         
         let concurrentDuplicatedResultsCount: Int = 10
         var handledResultCount: Int = 0
@@ -482,9 +485,9 @@ extension MovieSearchPresenterTests {
         presenter.attachView(view: view)
         
         let numberOfMovies: Int = 10
-        let mockResult: MovieSearchResultDTO = Self.getMockResult(numberOfMovies: numberOfMovies,
-                                                                  currentPage: scenario.resultCurrentPage,
-                                                                  totalPagesCount: scenario.resultTotalPagesCount)
+        let mockResult: GetSearchMovieResponseDTO = Self.getMockResult(numberOfMovies: numberOfMovies,
+                                                                       currentPage: scenario.resultCurrentPage,
+                                                                       totalPagesCount: scenario.resultTotalPagesCount)
         
         let concurrentDuplicatedResultsCount: Int = 10
         let serialHandledResultCountQueue = DispatchQueue(label: "serialHandledResultCountQueue")

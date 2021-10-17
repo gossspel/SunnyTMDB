@@ -38,8 +38,8 @@ protocol MovieSearchPresenterTestableProtocol: MovieSearchPresenterProtocol {
     func resetSearchDataToDefaultState()
     func showEmptyResultsFromSearch()
     func doGetCallViaMovieSearchService(searchText: String, page: Int)
-    func handleMovieSearchResultResponse(result: MovieSearchResultDTO)
-    func displayBrandNewSearchResult(result: MovieSearchResultDTO)
-    func displayNextPaginatedSearchResult(result: MovieSearchResultDTO)
+    func handleMovieSearchResultResponse(result: GetSearchMovieResponseDTO)
+    func displayBrandNewSearchResult(result: GetSearchMovieResponseDTO)
+    func displayNextPaginatedSearchResult(result: GetSearchMovieResponseDTO)
     func handleMovieSearchFailureResponse(statusCode: HTTPStatusCode?)
 }
